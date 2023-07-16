@@ -26,7 +26,11 @@ def register_user(email: str, username: str, password: str):
 def login_user(email_or_username, password):
     user = User.find_by_email_or_username(email_or_username)
     if not user or not user.check_password(password):
-        abort(HTTPStatus.UNAUTHORIZED, "email/username or password does not match", status="fail")
+        abort(
+            HTTPStatus.UNAUTHORIZED,
+            "email/username or password does not match",
+            status="fail",
+        )
     access_token = user.encode_access_token()
     return _create_auth_successful_response(
         token=access_token,

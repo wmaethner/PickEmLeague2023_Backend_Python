@@ -11,7 +11,9 @@ class RegisterUser(Resource):
     @auth_ns.expect(auth_user_parser)
     def post(self):
         user_dict = auth_user_parser.parse_args()
-        return register_user(user_dict.get("email"), user_dict.get("username"), user_dict.get("password"))
+        return register_user(
+            user_dict.get("email"), user_dict.get("username"), user_dict.get("password")
+        )
 
 
 @auth_ns.route("/login")
