@@ -40,9 +40,17 @@ class TeamList(Resource):
             db.session.commit()
 
 
-@team_ns.route("/<id>")
+@team_ns.route("/by_id/<id>")
 @team_ns.param("id", "Team ID")
-class Team(Resource):
+class TeamById(Resource):
     @team_ns.marshal_with(team_model)
     def get(self, id):
         return TeamObject.find_by_id(id)
+
+
+@team_ns.route("/by_abbr/<abbr>")
+@team_ns.param("abbr", "Team abbreviation")
+class TeamByAbbr(Resource):
+    @team_ns.marshal_with(team_model)
+    def get(self, abbr):
+        return TeamObject.find_by_abbreviation(abbr)

@@ -4,7 +4,7 @@ from logging.config import fileConfig
 from alembic import context
 from flask import current_app
 
-from src.PickEmLeague.models import *
+from src.PickEmLeague.models import game, team, user
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
