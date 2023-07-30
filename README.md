@@ -69,6 +69,7 @@ If you want to learn more about creating good readme files then refer the follow
 * Flask - [https://flask.palletsprojects.com/en/2.3.x/](https://flask.palletsprojects.com/en/2.3.x/)
 * Flask Restx - [https://flask-restx.readthedocs.io/en/latest/index.html](https://flask-restx.readthedocs.io/en/latest/index.html)
 * Flask Api with JWT Tutorial - [https://aaronluna.dev/series/flask-api-tutorial/part-1/](https://aaronluna.dev/series/flask-api-tutorial/part-1/)
+* Adding enums to data models - [https://michaelcho.me/article/using-python-enums-in-sqlalchemy-models](https://michaelcho.me/article/using-python-enums-in-sqlalchemy-models)
 
 
 # Things to add

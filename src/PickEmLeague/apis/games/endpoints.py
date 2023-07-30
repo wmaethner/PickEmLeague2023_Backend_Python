@@ -59,16 +59,12 @@ class GamesByWeek(Resource):
         return Game.find_by_week(week)
 
 
-# @game_ns.route("/<week>/<abbr>")
-# @game_ns.param("week", "Week number")
-# @game_ns.param("abbr", "Team")
-# class GameByWeekAndTeam(Resource):
-#     # @game_ns.marshal_with(game_model)
-#     def get(self, week, abbr):
-#         team = Team.find_by_abbreviation(abbr)
-#         game = Game.find_by_week_and_team(week, team)
-#         print(game)
-#         if game:
-#             return True
-#         else:
-#             return False
+@game_ns.route("/<week>/<abbr>")
+@game_ns.param("week", "Week number")
+@game_ns.param("abbr", "Team")
+class GameByWeekAndTeam(Resource):
+    @game_ns.marshal_with(game_model)
+    def get(self, week, abbr):
+        team = Team.find_by_abbreviation(abbr)
+        game = Game.find_by_week_and_team(week, team)
+        return game
