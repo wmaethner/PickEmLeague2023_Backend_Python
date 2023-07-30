@@ -71,17 +71,21 @@ class User(db.Model):
         return Result.Ok(user_dict)
 
     @classmethod
-    def find_by_email_or_username(cls, email_or_username) -> Optional["User"]:
+    def find_by_id(cls, id: int) -> "User":
+        return cls.query.filter_by(id=id).first()
+
+    @classmethod
+    def find_by_email_or_username(cls, email_or_username: str) -> Optional["User"]:
         user = User.find_by_email(email_or_username)
         user = User.find_by_username(email_or_username) if not user else user
         return user
 
     @classmethod
-    def find_by_email(cls, email) -> "User":
+    def find_by_email(cls, email: str) -> "User":
         return cls.query.filter_by(email=email).first()
 
     @classmethod
-    def find_by_username(cls, username) -> "User":
+    def find_by_username(cls, username: str) -> "User":
         return cls.query.filter_by(username=username).first()
 
     @classmethod

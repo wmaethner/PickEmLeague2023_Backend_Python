@@ -1,14 +1,8 @@
-import enum
 from typing import List
 
 from src.PickEmLeague import db
-
-
-class GameResult(enum.Enum):
-    NOT_PLAYED = "Not Played"
-    HOME_WIN = "Home Win"
-    AWAY_WIN = "Away Win"
-    TIE = "Tie"
+from src.PickEmLeague.models.enums import GameResult
+from src.PickEmLeague.models.team import Team
 
 
 class Game(db.Model):
@@ -24,11 +18,11 @@ class Game(db.Model):
     away_team = db.relationship("Team", lazy=True, foreign_keys=[away_team_id])
 
     @classmethod
-    def find_by_id(cls, id) -> "Game":
+    def find_by_id(cls, id: int) -> "Game":
         return cls.query.filter_by(id=id).first()
 
     @classmethod
-    def find_by_week(cls, week) -> List["Game"]:
+    def find_by_week(cls, week: int) -> List["Game"]:
         return cls.query.filter_by(week=week).all()
 
     @classmethod
@@ -36,8 +30,7 @@ class Game(db.Model):
         return cls.query.all()
 
     @classmethod
-    def find_by_week_and_team(cls, week, team) -> "Game":
+    def find_by_week_and_team(cls, week: int, team: Team) -> "Game":
         return cls.query.filter(
-            (cls.week == week)
-            & ((cls.home_team_id == team.id) | (cls.away_team_id == team.id))
+            (cls.week == week) & ((cls.home_team == team) | (cls.away_team == team))
         ).first()

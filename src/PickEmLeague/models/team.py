@@ -14,11 +14,11 @@ class Team(db.Model):
     division = db.Column(db.String(5), nullable=False)
 
     @classmethod
-    def find_by_id(cls, id) -> "Team":
+    def find_by_id(cls, id: int) -> "Team":
         return cls.query.filter_by(id=id).first()
 
     @classmethod
-    def find_by_abbreviation(cls, abbr) -> "Team":
+    def find_by_abbreviation(cls, abbr: str) -> "Team":
         return cls.query.filter_by(abbreviation=abbr).first()
 
     @classmethod
