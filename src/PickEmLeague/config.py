@@ -5,7 +5,7 @@ from pathlib import Path
 HERE = Path(__file__).parent
 DATABASE_DEV = "postgresql://postgres:postgres@localhost:5432/pick_em_league_2023"
 DATABASE_TEST = "sqlite:///" + str(HERE / "python_flask_test.db")
-# DATABASE_PROD = "sqlite:///" + str(HERE / "flask_api_tutorial_prod.db")
+DATABASE_PROD = "sqlite:///" + str(HERE / "pick_em_league_prod.db")
 
 
 class Config:
