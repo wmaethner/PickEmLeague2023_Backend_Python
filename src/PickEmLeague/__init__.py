@@ -28,19 +28,3 @@ def create_app(config_name):
     migrate.init_app(application, db, directory="src/PickEmLeague/migrations")
     bcrypt.init_app(application)
     return application
-
-
-application = app = Flask(__name__, instance_relative_config=True)
-application.config.from_object(get_config(os.getenv("FLASK_ENV", "development")))
-
-from src.PickEmLeague.apis import api_bp
-
-application.register_blueprint(api_bp, url_prefix="/api")
-
-cors.init_app(application)
-db.init_app(application)
-migrate.init_app(application, db, directory="src/PickEmLeague/migrations")
-bcrypt.init_app(application)
-
-if __name__ == "__main__":
-    application.run()

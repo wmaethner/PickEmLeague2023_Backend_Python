@@ -7,7 +7,7 @@ application = app = create_app(os.getenv("FLASK_ENV", "development"))
 
 @app.route("/")
 def index():
-    return "The index page"
+    return f'The index page {os.getenv("FLASK_ENV", "development")}'
 
 
 if __name__ == "__main__":
