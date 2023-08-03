@@ -1,1 +1,0 @@
-wsgi_app = src.PickEmLeague:create_app()
