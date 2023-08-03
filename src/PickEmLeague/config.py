@@ -39,7 +39,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     """Production configuration."""
 
-    # SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", SQLITE_PROD)
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", DATABASE_PROD)
     TOKEN_EXPIRE_HOURS = 1
     PRESERVE_CONTEXT_ON_EXCEPTION = True
 
