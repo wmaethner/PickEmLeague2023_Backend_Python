@@ -7,7 +7,7 @@ from src.PickEmLeague.models.user import User
 
 
 def test_check_password_correct(user):
-    assert user.check_password("PASSWORD1")
+    assert user.check_password("PASSWORD")
 
 
 def test_encode_access_token(user):
