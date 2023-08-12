@@ -1,6 +1,7 @@
 MESSAGE=""
 
 venv: venv/touchfile
+	. .venv/bin/activate;
 
 venv/touchfile: requirements.txt
 	test -d .venv || virtualenv .venv

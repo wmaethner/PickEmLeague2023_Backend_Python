@@ -6,6 +6,10 @@ from base64 import urlsafe_b64decode, urlsafe_b64encode
 from src.PickEmLeague.models.user import User
 
 
+def test_check_password_correct(user):
+    assert user.check_password("PASSWORD1")
+
+
 def test_encode_access_token(user):
     access_token = user.encode_access_token()
     assert isinstance(access_token, bytes)
