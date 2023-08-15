@@ -25,3 +25,30 @@ jobs:
 
     - name: Run tests
       run: pytest
+
+    - name: Get timestamp
+      uses: gerred/actions/current-time@master
+      id: current-time
+
+    - name: Run string replace
+      uses: frabert/replace-string-action@master
+      id: format-time
+      with:
+        pattern: '[:\.]+'
+        string: "${{ steps.current-time.outputs.time }}"
+        replace-with: '-'
+        flags: 'g'
+        
+    - name: Generate deployment package
+      run: zip -r deploy.zip . -x '*.git*'
+
+    - name: Beanstalk Deploy
+      uses: einaregilsson/beanstalk-deploy@v21
+      with:
+        aws_access_key: ${{secrets.AWS_ACCESS_KEY}}
+        aws_secret_key: ${{secrets.AWS_SECRET_KEY}}
+        region: us-east-1
+        application_name: PickEmLeague2023
+        environment_name: PickEmLeague2023-env
+        version_label: "pickemleague2023-${{ steps.format-time.outputs.replaced }}" #Using timestamp create on earlier step
+        deployment_package: deploy.zip
