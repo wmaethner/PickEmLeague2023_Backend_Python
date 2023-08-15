@@ -4,6 +4,7 @@ from flask_restx import Api
 from src.PickEmLeague.apis.auth.endpoints import auth_ns
 from src.PickEmLeague.apis.game_picks.endpoints import game_picks_ns
 from src.PickEmLeague.apis.games.endpoints import game_ns
+from src.PickEmLeague.apis.misc.endpoints import misc_ns
 from src.PickEmLeague.apis.teams.endpoints import team_ns
 from src.PickEmLeague.apis.users.endpoints import user_ns
 
@@ -23,3 +24,4 @@ api.add_namespace(auth_ns, path="/auth")
 api.add_namespace(team_ns, path="/teams")
 api.add_namespace(game_ns, path="/games")
 api.add_namespace(game_picks_ns, path="/game_picks")
+api.add_namespace(misc_ns, path="/misc")
