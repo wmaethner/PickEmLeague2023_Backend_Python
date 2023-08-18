@@ -29,6 +29,6 @@ def create_app(config_name):
     bcrypt.init_app(application)
 
     with application.app_context():
-        migrate.upgrade(directory="src/PickEmLeague/migrations")
+        upgrade(directory="src/PickEmLeague/migrations")
 
     return application
