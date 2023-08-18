@@ -4,7 +4,7 @@ import os
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
 from flask_sqlalchemy import SQLAlchemy
 
 from src.PickEmLeague.config import get_config
@@ -27,4 +27,7 @@ def create_app(config_name):
     db.init_app(application)
     migrate.init_app(application, db, directory="src/PickEmLeague/migrations")
     bcrypt.init_app(application)
+
+    upgrade(directory="src/PickEmLeague/migrations")
+
     return application
