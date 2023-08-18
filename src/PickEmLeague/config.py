@@ -39,7 +39,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     """Production configuration."""
 
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", DATABASE_PROD)
+    SQLALCHEMY_DATABASE_URI = f'postgres://{os.getenv("DATABASE_USER")}:{os.getenv("DATABASE_PASSWORD")}@{os.getenv("DATABASE_URL", DATABASE_PROD)}:5432/pickemleague2023'
     TOKEN_EXPIRE_HOURS = 1
     PRESERVE_CONTEXT_ON_EXCEPTION = True
 
