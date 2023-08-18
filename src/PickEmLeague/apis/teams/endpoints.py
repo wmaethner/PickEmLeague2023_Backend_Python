@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from typing import List
 
 from flask import request
 from flask_restx import Namespace, Resource
@@ -16,7 +17,7 @@ team_ns.models[team_model.name] = team_model
 
 @team_ns.route("")
 class TeamList(Resource):
-    @team_ns.response(HTTPStatus.OK, "Retrieved team list.", team_model)
+    @team_ns.response(HTTPStatus.OK, "Retrieved team list.", [team_model])
     @team_ns.marshal_list_with(team_model)
     def get(self):
         """Retrieve a list of users."""
