@@ -28,7 +28,10 @@ def create_app(config_name):
     migrate.init_app(application, db, directory="src/PickEmLeague/migrations")
     bcrypt.init_app(application)
 
+    print("Pre upgrade")
     with application.app_context():
+        print("Upgrading")
         upgrade(directory="src/PickEmLeague/migrations")
+    print("Post upgrade")
 
     return application
