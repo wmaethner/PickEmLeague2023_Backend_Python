@@ -1,10 +1,11 @@
 """Flask app initialization via factory pattern."""
 import os
 
+import flask_migrate
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
-from flask_migrate import Migrate, upgrade
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 from src.PickEmLeague.config import get_config
@@ -31,7 +32,7 @@ def create_app(config_name):
     print("Pre upgrade")
     with application.app_context():
         print("Upgrading")
-        upgrade(directory="src/PickEmLeague/migrations")
+        flask_migrate.upgrade(directory="src/PickEmLeague/migrations")
     print("Post upgrade")
 
     return application
