@@ -32,11 +32,12 @@ def login_user(email_or_username, password):
             status="fail",
         )
     access_token = user.encode_access_token()
-    return _create_auth_successful_response(
-        token=access_token,
-        status_code=HTTPStatus.OK,
-        message="successfully logged in",
-    )
+    return jsonify(success=True, token=access_token)
+    # return _create_auth_successful_response(
+    #     token=access_token,
+    #     status_code=HTTPStatus.OK,
+    #     message="successfully logged in",
+    # )
 
 
 def _create_auth_successful_response(token, status_code, message):
