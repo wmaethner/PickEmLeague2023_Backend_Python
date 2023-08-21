@@ -26,8 +26,9 @@ def register_user(email: str, username: str, password: str):
 
 def login_user(email_or_username, password):
     user = User.find_by_email_or_username(email_or_username)
+    print(user)
     if not user or not user.check_password(password):
-        {"success": False, "message": "email/username or password does not match"}
+        return {"success": False, "message": "email/username or password does not match"}
         # abort(
         #     HTTPStatus.UNAUTHORIZED,
         #     "email/username or password does not match",
