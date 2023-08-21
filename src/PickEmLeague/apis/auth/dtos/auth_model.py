@@ -4,5 +4,5 @@ from flask_restx.fields import Boolean, String
 
 auth_model = Model(
     "AuthResult",
-    {"success": Boolean, "token": String},
+    {"success": Boolean, "token": String, "message": String},
 )
