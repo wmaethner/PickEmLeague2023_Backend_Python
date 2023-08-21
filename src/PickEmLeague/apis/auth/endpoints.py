@@ -26,5 +26,6 @@ class LoginUser(Resource):
     def post(self):
         print("Login user")
         user_dict = auth_login_parser.parse_args()
-        print(user_dict)
+        print("values")
+        print(user_dict.values())
         return login_user(user_dict.get("username"), user_dict.get("password"))
