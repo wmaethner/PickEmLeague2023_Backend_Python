@@ -21,6 +21,7 @@ class TeamList(Resource):
     @team_ns.marshal_list_with(team_model)
     def get(self):
         """Retrieve a list of users."""
+        print("Get team list")
         return get_team_list()
 
     @team_ns.expect(team_list_upload_parser)
