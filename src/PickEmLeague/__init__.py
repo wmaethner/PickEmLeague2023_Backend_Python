@@ -1,4 +1,5 @@
 """Flask app initialization via factory pattern."""
+import logging
 import os
 
 import flask_migrate
@@ -16,9 +17,17 @@ migrate = Migrate()
 bcrypt = Bcrypt()
 
 
+def configure_logging():
+    # register root logging
+    logging.basicConfig(level=logging.DEBUG)
+    # logging.getLogger("werkzeug").setLevel(logging.INFO)
+
+
 def create_app(config_name):
+    configure_logging()
     application = Flask(__name__, instance_relative_config=True)
     application.config.from_object(get_config(config_name))
+    # configure_logging()
 
     from src.PickEmLeague.apis import api_bp
 

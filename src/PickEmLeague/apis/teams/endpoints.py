@@ -1,7 +1,8 @@
+import logging
 from http import HTTPStatus
 from typing import List
 
-from flask import request
+from flask import current_app, request
 from flask_restx import Namespace, Resource
 
 from src.PickEmLeague import db
@@ -22,6 +23,10 @@ class TeamList(Resource):
     def get(self):
         """Retrieve a list of users."""
         print("Get team list")
+        logging.info("Team list logging")
+        current_app.logger.debug("Current app team list")
+        current_app.logger.error("Current app team list")
+        team_ns.logger.info("hello from ns1")
         return get_team_list()
 
     @team_ns.expect(team_list_upload_parser)

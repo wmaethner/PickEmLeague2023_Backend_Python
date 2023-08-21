@@ -16,12 +16,12 @@ def register_user(email: str, username: str, password: str):
     db.session.add(new_user)
     db.session.commit()
     access_token = new_user.encode_access_token()
-    return {"success": True, "token": access_token}
-    # return _create_auth_successful_response(
-    #     token=access_token,
-    #     status_code=HTTPStatus.CREATED,
-    #     message="successfully registered",
-    # )
+    # return {"success": True, "token": access_token}
+    return _create_auth_successful_response(
+        token=access_token,
+        status_code=HTTPStatus.CREATED,
+        message="successfully registered",
+    )
 
 
 def login_user(email_or_username, password):
@@ -34,12 +34,15 @@ def login_user(email_or_username, password):
         #     status="fail",
         # )
     access_token = user.encode_access_token()
-    return {"success": True, "token": access_token}
-    # return _create_auth_successful_response(
+    return {"success": True, "token": access_token, "message": "successfully logged in"}
+    # print(access_token)
+    # response = _create_auth_successful_response(
     #     token=access_token,
     #     status_code=HTTPStatus.OK,
     #     message="successfully logged in",
     # )
+    # print(response.json)
+    # return response
 
 
 def _create_auth_successful_response(token, status_code, message):

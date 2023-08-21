@@ -43,7 +43,8 @@ class User(db.Model):
             expire = now + timedelta(seconds=5)
         payload = dict(exp=expire, iat=now, sub=self.id, admin=self.admin)
         key = current_app.config.get("SECRET_KEY")
-        return bytes(jwt.encode(payload, key, algorithm="HS256"), "utf-8")
+        # return bytes(jwt.encode(payload, key, algorithm="HS256"), "utf-8")
+        return jwt.encode(payload, key, algorithm="HS256")
 
     @staticmethod
     def decode_access_token(access_token):
