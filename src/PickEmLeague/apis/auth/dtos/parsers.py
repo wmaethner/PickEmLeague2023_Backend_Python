@@ -3,10 +3,10 @@ from flask_restx.reqparse import RequestParser
 
 auth_register_parser = RequestParser(bundle_errors=True)
 auth_register_parser.add_argument(
-    name="first_name", type=email(), location="form", required=True, nullable=False
+    name="first_name", type=str, location="form", required=True, nullable=False
 )
 auth_register_parser.add_argument(
-    name="last_name", type=email(), location="form", required=True, nullable=False
+    name="last_name", type=str, location="form", required=True, nullable=False
 )
 auth_register_parser.add_argument(
     name="email", type=email(), location="form", required=True, nullable=False
