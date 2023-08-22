@@ -5,6 +5,7 @@ from flask_restx import abort
 
 from src.PickEmLeague import db
 from src.PickEmLeague.models.user import User
+from src.PickEmLeague.util.result import Result
 
 
 def register_user(first: str, last: str, email: str, username: str, password: str):
@@ -36,7 +37,10 @@ def login_user(email_or_username, password):
     user = User.find_by_email_or_username(email_or_username)
     print(user)
     if not user or not user.check_password(password):
-        return {"success": False, "message": "email/username or password does not match"}
+        return _create_auth_unsuccessful_response(
+            HTTPStatus.UNAUTHORIZED, "email/username or password does not match"
+        )
+        # return {"success": False, "message": "email/username or password does not match"}
         # abort(
         #     HTTPStatus.UNAUTHORIZED,
         #     "email/username or password does not match",
@@ -62,6 +66,12 @@ def _create_auth_successful_response(token, status_code, message):
         token_type="bearer",
         expires_in=_get_token_expire_time(),
     )
+    response.status_code = status_code
+    return response
+
+
+def _create_auth_unsuccessful_response(status_code, message):
+    response = jsonify(Result.Fail(message))
     response.status_code = status_code
     return response
 
