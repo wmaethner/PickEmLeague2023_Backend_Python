@@ -32,7 +32,7 @@ class LoginUser(Resource):
     @auth_ns.expect(auth_login_parser)
     # @auth_ns.response(401, "Unauthorized", error_model)
     @auth_ns.marshal_with(auth_model)
-    @auth_ns.marshal_with(error_model, code=HTTPStatus.UNAUTHORIZED)
+    @auth_ns.marshal_with(error_model, code=HTTPStatus.CREATED)
     def post(self):
         print("Login user")
         user_dict = auth_login_parser.parse_args()
