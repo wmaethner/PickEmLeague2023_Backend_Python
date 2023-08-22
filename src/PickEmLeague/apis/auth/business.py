@@ -9,19 +9,21 @@ from src.PickEmLeague.models.user import User
 
 def register_user(email: str, username: str, password: str):
     if User.find_by_email(email):
-        abort(HTTPStatus.CONFLICT, f"{email} is already registered", status="fail")
+        # abort(HTTPStatus.CONFLICT, f"{email} is already registered", status="fail")
+        return {"success": False, "message": f"{email} is already registered"}
     if User.find_by_username(username):
-        abort(HTTPStatus.CONFLICT, f"{username} is already registered", status="fail")
+        # abort(HTTPStatus.CONFLICT, f"{username} is already registered", status="fail")
+        return {"success": False, "message": f"{username} is already registered"}
     new_user = User(email=email, username=username, password=password)
     db.session.add(new_user)
     db.session.commit()
     access_token = new_user.encode_access_token()
-    # return {"success": True, "token": access_token}
-    return _create_auth_successful_response(
-        token=access_token,
-        status_code=HTTPStatus.CREATED,
-        message="successfully registered",
-    )
+    return {"success": True, "token": access_token}
+    # return _create_auth_successful_response(
+    #     token=access_token,
+    #     status_code=HTTPStatus.CREATED,
+    #     message="successfully registered",
+    # )
 
 
 def login_user(email_or_username, password):
