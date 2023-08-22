@@ -15,7 +15,11 @@ class RegisterUser(Resource):
     def post(self):
         user_dict = auth_register_parser.parse_args()
         return register_user(
-            user_dict.get("email"), user_dict.get("username"), user_dict.get("password")
+            user_dict.get("first_name"),
+            user_dict.get("last_name"),
+            user_dict.get("email"),
+            user_dict.get("username"),
+            user_dict.get("password"),
         )
 
 

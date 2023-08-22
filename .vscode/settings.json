@@ -4,5 +4,10 @@
   },
   "python.formatting.provider": "black",
   "editor.formatOnSave": true,
-  "editor.formatOnType": false
+  "editor.formatOnType": false,
+  "snyk.features.codeQuality": false,
+  "snyk.features.codeSecurity": false,
+  "snyk.features.infrastructureAsCode": false,
+  "snyk.features.openSourceSecurity": false,
+  "snyk.scanningMode": "manual"
 }
