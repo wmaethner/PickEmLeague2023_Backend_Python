@@ -1,5 +1,6 @@
 alembic==1.11.1
 aniso8601==9.0.1
+ansicolors==1.1.8
 attrs==23.1.0
 bcrypt==4.0.1
 black==23.7.0

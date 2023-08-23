@@ -1,9 +1,12 @@
 """Flask app initialization via factory pattern."""
+import datetime
 import logging
 import os
+import time
 
+import colors
 import flask_migrate
-from flask import Flask
+from flask import Flask, g, request
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -38,10 +41,7 @@ def create_app(config_name):
     migrate.init_app(application, db, directory="src/PickEmLeague/migrations")
     bcrypt.init_app(application)
 
-    print("Pre upgrade")
     with application.app_context():
-        print("Upgrading")
         flask_migrate.upgrade(directory="src/PickEmLeague/migrations")
-    print("Post upgrade")
 
     return application
