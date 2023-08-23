@@ -1,20 +1,15 @@
-from http import HTTPStatus
-
-from flask import current_app, jsonify
-from flask_restx import abort
+from flask import current_app
 
 from src.PickEmLeague import db
+from src.PickEmLeague.apis.core.base_model import BaseModel
 from src.PickEmLeague.models.user import User
-from src.PickEmLeague.util.result import Result
 
 
 def register_user(first: str, last: str, email: str, username: str, password: str):
     if User.find_by_email(email):
-        # abort(HTTPStatus.CONFLICT, f"{email} is already registered", status="fail")
-        return {"success": False, "message": f"{email} is already registered"}
+        return BaseModel.ErrorResult(f"{email} is already registered")
     if User.find_by_username(username):
-        # abort(HTTPStatus.CONFLICT, f"{username} is already registered", status="fail")
-        return {"success": False, "message": f"{username} is already registered"}
+        return BaseModel.ErrorResult(f"{username} is already registered")
     new_user = User(
         first_name=first,
         last_name=last,
@@ -25,55 +20,15 @@ def register_user(first: str, last: str, email: str, username: str, password: st
     db.session.add(new_user)
     db.session.commit()
     access_token = new_user.encode_access_token()
-    return {"success": True, "token": access_token}
-    # return _create_auth_successful_response(
-    #     token=access_token,
-    #     status_code=HTTPStatus.CREATED,
-    #     message="successfully registered",
-    # )
+    return BaseModel.SuccessResult({"token": access_token}, "successfully registered")
 
 
 def login_user(email_or_username, password):
     user = User.find_by_email_or_username(email_or_username)
-    print(user)
     if not user or not user.check_password(password):
-        return _create_auth_unsuccessful_response(
-            HTTPStatus.UNAUTHORIZED, "email/username or password does not match"
-        )
-        # return {"success": False, "message": "email/username or password does not match"}
-        # abort(
-        #     HTTPStatus.UNAUTHORIZED,
-        #     "email/username or password does not match",
-        #     status="fail",
-        # )
+        return BaseModel.ErrorResult("email/username or password does not match")
     access_token = user.encode_access_token()
-    return {"success": True, "token": access_token, "message": "successfully logged in"}
-    # print(access_token)
-    # response = _create_auth_successful_response(
-    #     token=access_token,
-    #     status_code=HTTPStatus.OK,
-    #     message="successfully logged in",
-    # )
-    # print(response.json)
-    # return response
-
-
-def _create_auth_successful_response(token, status_code, message):
-    response = jsonify(
-        status="success",
-        message=message,
-        access_token=token,
-        token_type="bearer",
-        expires_in=_get_token_expire_time(),
-    )
-    response.status_code = status_code
-    return response
-
-
-def _create_auth_unsuccessful_response(status_code, message):
-    response = jsonify(Result.Fail(message))
-    response.status_code = status_code
-    return response
+    return BaseModel.SuccessResult({"token": access_token}, "successfully logged in")
 
 
 def _get_token_expire_time():

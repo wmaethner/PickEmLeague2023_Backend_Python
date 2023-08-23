@@ -1,15 +1,15 @@
-from http import HTTPStatus
-
+from flask import jsonify
 from flask_restx import Namespace, Resource
 
-from ..core.error_model import error_model
+from src.PickEmLeague.models.user import User
+
 from .business import login_user, register_user
-from .dtos.auth_model import auth_model
+from .dtos.auth_model import auth_data, auth_model
 from .dtos.parsers import auth_login_parser, auth_register_parser
 
 auth_ns = Namespace(name="auth", validate=True)
+auth_ns.models[auth_data.name] = auth_data
 auth_ns.models[auth_model.name] = auth_model
-auth_ns.models[error_model.name] = error_model
 
 
 @auth_ns.route("/register")
@@ -30,13 +30,7 @@ class RegisterUser(Resource):
 @auth_ns.route("/login")
 class LoginUser(Resource):
     @auth_ns.expect(auth_login_parser)
-    # @auth_ns.response(401, "Unauthorized", error_model)
     @auth_ns.marshal_with(auth_model)
-    @auth_ns.marshal_with(error_model, code=HTTPStatus.CREATED)
     def post(self):
-        print("Login user")
         user_dict = auth_login_parser.parse_args()
-        print("values")
-        print(user_dict.values())
-        print(login_user(user_dict.get("username"), user_dict.get("password")))
         return login_user(user_dict.get("username"), user_dict.get("password"))

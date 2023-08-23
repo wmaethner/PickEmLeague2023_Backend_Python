@@ -1,16 +1,9 @@
 """Parsers and serializers for /auth API endpoints."""
 from flask import Response
 from flask_restx import Model
-from flask_restx.fields import Boolean, Integer, String
+from flask_restx.fields import String
 
-auth_model = Model(
-    "AuthResult",
-    {"success": Boolean, "token": String, "message": String},
-    # {
-    #     "access_token": String,
-    #     "expires_in": Integer,
-    #     "message": String,
-    #     "status": String,
-    #     "token_type": String,
-    # },
-)
+from ...core.base_model import BaseModel
+
+auth_data = Model("AuthData", {"token": String})
+auth_model = BaseModel("AuthResult", auth_data).model()

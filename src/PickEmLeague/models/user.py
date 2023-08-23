@@ -94,3 +94,9 @@ class User(db.Model):
     @classmethod
     def find_all(cls) -> List["User"]:
         return cls.query.all()
+
+    @classmethod
+    def clear_all(cls) -> int:
+        deleted = cls.query.delete()
+        db.session.commit()
+        return deleted
