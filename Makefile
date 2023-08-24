@@ -31,3 +31,6 @@ upgrade: venv
 downgrade: venv
 	. .venv/bin/activate; \
 	flask db downgrade
+
+deploy:
+	eb deploy --profile personal

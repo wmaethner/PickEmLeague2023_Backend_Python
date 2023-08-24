@@ -1,4 +1,5 @@
 import datetime
+import logging
 import os
 import time
 from logging.config import dictConfig
@@ -33,6 +34,7 @@ dictConfig(
 )
 
 application = create_app(os.getenv("FLASK_ENV", "development"))
+application.logger.setLevel(logging.DEBUG)
 
 
 @application.route("/")
