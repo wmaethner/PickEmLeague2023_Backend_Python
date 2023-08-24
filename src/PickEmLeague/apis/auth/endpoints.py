@@ -33,4 +33,9 @@ class LoginUser(Resource):
     @auth_ns.marshal_with(auth_model)
     def post(self):
         user_dict = auth_login_parser.parse_args()
-        return login_user(user_dict.get("username"), user_dict.get("password"))
+        username = user_dict.get("username")
+        password = user_dict.get("password")
+        print(f"Login for {username}")
+        result = login_user(username, password)
+        print(f"Result: {result}")
+        return result

@@ -4,7 +4,7 @@ import time
 from logging.config import dictConfig
 
 import colors
-from flask import g, request
+from flask import Response, g, request
 
 from src.PickEmLeague import create_app
 
@@ -38,6 +38,41 @@ application = create_app(os.getenv("FLASK_ENV", "development"))
 @application.route("/")
 def index():
     return f'The index page {os.getenv("FLASK_ENV", "development")}'
+
+
+@application.before_request
+def log_request_start():
+    print(f"{datetime.datetime.fromtimestamp(time.time())}: {request.url}")
+    # if request.method == "GET":
+    #     if request.args:
+    #         print(request.args)
+    #         print(len(request.args))
+    # elif request.method == "POST":
+    #     print(request.form)
+
+
+@application.after_request
+def log_request_end(response: Response):
+    print(f"{datetime.datetime.fromtimestamp(time.time())}: {response.json}")
+    return response
+
+
+@application.errorhandler
+def handle_exception(e):
+    """Return JSON instead of HTML for HTTP errors."""
+    print(e)
+    # start with the correct headers and status code from the error
+    # response = e.get_response()
+    # replace the body with JSON
+    # response.data = json.dumps(
+    #     {
+    #         "code": e.code,
+    #         "name": e.name,
+    #         "description": e.description,
+    #     }
+    # )
+    # response.content_type = "application/json"
+    # return response
 
 
 # @application.before_request

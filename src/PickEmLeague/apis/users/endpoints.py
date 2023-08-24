@@ -17,6 +17,7 @@ class UserList(Resource):
     @user_ns.marshal_list_with(user_model)
     def get(self):
         """Retrieve a list of users."""
+        user_ns.logger.info("Getting user list")
         return get_user_list()
 
 
