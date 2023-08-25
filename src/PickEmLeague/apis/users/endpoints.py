@@ -16,7 +16,7 @@ user_ns.models[user_model.name] = user_model
 @user_ns.route("/current")
 class CurrentUser(Resource):
     @token_required
-    @user_ns.marshal_list_with(user_model)
+    @user_ns.marshal_with(user_model)
     def get(self):
         print("Current user get")
         return {"token": g.token}
