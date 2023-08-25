@@ -166,3 +166,4 @@ cython_debug/
 
 # Custom
 config/
+src/PickEmLeague/python_flask_test.db

@@ -35,7 +35,5 @@ class LoginUser(Resource):
         user_dict = auth_login_parser.parse_args()
         username = user_dict.get("username")
         password = user_dict.get("password")
-        print(f"Login for {username}")
         result = login_user(username, password)
-        print(f"Result: {result}")
         return result
