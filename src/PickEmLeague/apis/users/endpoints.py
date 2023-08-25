@@ -2,6 +2,7 @@ from http import HTTPStatus
 
 from flask_restx import Namespace, Resource
 
+from src.PickEmLeague.decorators.auth import token_required
 from src.PickEmLeague.models.user import User
 
 from .business import get_user_list
@@ -9,6 +10,14 @@ from .dtos.user_model import user_model
 
 user_ns = Namespace(name="users", validate=True)
 user_ns.models[user_model.name] = user_model
+
+
+@user_ns.route("/current")
+class CurrentUser(Resource):
+    @token_required
+    def get(self):
+        print("Current user get")
+        return "CURRENT USER"
 
 
 @user_ns.route("/")

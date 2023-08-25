@@ -3,9 +3,8 @@ from http import HTTPStatus
 from flask import current_app, request
 from flask_restx import Namespace, Resource
 
-from PickEmLeague.apis.core.base_model import BaseModel
 from src.PickEmLeague import db
-from src.PickEmLeague.models.team import Team as TeamObject
+from src.PickEmLeague.apis.core.base_model import BaseModel
 
 from .dtos.misc_model import misc_data, misc_model
 
