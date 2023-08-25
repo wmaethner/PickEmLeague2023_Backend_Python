@@ -4,8 +4,5 @@ from flask_restx.fields import Boolean, String
 
 user_model = Model(
     "User",
-    {
-        "email": String,
-        "admin": Boolean,
-    },
+    {"email": String, "admin": Boolean, "token": String},
 )
