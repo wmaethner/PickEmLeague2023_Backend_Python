@@ -4,7 +4,15 @@ from flask import jsonify
 from flask_restx import abort
 
 from src.PickEmLeague import db
+from src.PickEmLeague.apis.core.base_model import BaseModel
 from src.PickEmLeague.models.user import User
+
+
+def get_current_user(request):
+    token = request.headers["Authorization"]
+    result = User.decode_access_token(token.split(" ")[1])
+    user = User.find_by_id(result.value["id"])
+    return BaseModel.SuccessResult(user.to_json())
 
 
 def create_user(user_dict):

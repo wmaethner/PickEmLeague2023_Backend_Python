@@ -48,6 +48,15 @@ class User(db.Model):
         # return bytes(jwt.encode(payload, key, algorithm="HS256"), "utf-8")
         return jwt.encode(payload, key, algorithm="HS256")
 
+    def to_json(self):
+        return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email,
+            "admin": self.admin,
+        }
+
     @staticmethod
     def decode_access_token(access_token):
         if isinstance(access_token, bytes):

@@ -11,6 +11,7 @@ from src.PickEmLeague.apis.teams.endpoints import team_ns
 from src.PickEmLeague.apis.users.endpoints import user_ns
 
 api_bp = Blueprint("api", __name__, url_prefix="/api")
+authorizations = {"Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}}
 
 api = Api(
     api_bp,
@@ -18,7 +19,7 @@ api = Api(
     title="Pick Em League Swagger",
     description="Welcome to the Swagger UI documentation site!",
     doc="/swagger",
-    # authorizations=authorizations,
+    authorizations=authorizations,
 )
 
 api.add_namespace(user_ns, path="/users")
