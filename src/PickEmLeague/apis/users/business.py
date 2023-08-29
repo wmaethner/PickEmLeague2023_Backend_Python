@@ -35,4 +35,4 @@ def create_user(user_dict):
 
 def get_user_list():
     users = User.find_all()
-    return users
+    return BaseModel.SuccessResult([user.to_json() for user in users])

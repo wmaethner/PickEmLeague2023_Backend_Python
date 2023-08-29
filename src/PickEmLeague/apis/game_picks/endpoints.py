@@ -9,9 +9,10 @@ from .business import (
     get_game_picks_by_user_and_week,
     get_game_picks_by_week,
 )
-from .dtos.game_pick_model import game_pick_model
+from .dtos.game_pick_model import game_pick_data, game_pick_model
 
 game_picks_ns = Namespace(name="game_picks", validate=True)
+game_picks_ns.models[game_pick_data.name] = game_pick_data
 game_picks_ns.models[game_pick_model.name] = game_pick_model
 
 

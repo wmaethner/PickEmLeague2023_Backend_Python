@@ -20,7 +20,6 @@ class CurrentUser(Resource):
     @user_ns.doc(security="Bearer")
     @user_ns.marshal_with(user_model)
     def get(self):
-        print(request)
         return get_current_user(request)
 
 

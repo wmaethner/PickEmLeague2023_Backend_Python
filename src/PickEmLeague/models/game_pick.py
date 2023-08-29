@@ -20,6 +20,15 @@ class GamePick(db.Model):
     pick = db.Column(IntEnum(GameResult), default=GameResult.NOT_PLAYED)
     amount = db.Column(db.Integer)
 
+    def to_json(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "game_id": self.game_id,
+            "pick": self.pick,
+            "amount": self.amount,
+        }
+
     @classmethod
     def find_by_id(cls, id: int) -> "GamePick":
         return cls.query.filter_by(id=id).first()

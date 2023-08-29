@@ -2,6 +2,8 @@ from flask import current_app
 
 from src.PickEmLeague import db
 from src.PickEmLeague.apis.core.base_model import BaseModel
+from src.PickEmLeague.models.game import Game
+from src.PickEmLeague.models.game_pick import GamePick
 from src.PickEmLeague.models.user import User
 
 
@@ -19,6 +21,14 @@ def register_user(first: str, last: str, email: str, username: str, password: st
     )
     db.session.add(new_user)
     db.session.commit()
+
+    # initialize game picks
+    games = Game.find_all()
+    for game in games:
+        gp = GamePick(user=new_user, game=game)
+        db.session.add(gp)
+    db.session.commit()
+
     access_token = new_user.encode_access_token()
     return BaseModel.SuccessResult({"token": access_token}, "successfully registered")
 

@@ -4,8 +4,7 @@ import os
 import time
 from logging.config import dictConfig
 
-import colors
-from flask import Response, g, request
+from flask import Response, request
 
 from src.PickEmLeague import create_app
 
