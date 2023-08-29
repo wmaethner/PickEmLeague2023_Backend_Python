@@ -10,8 +10,12 @@ from src.PickEmLeague.models.user import User
 
 def get_current_user(request):
     token = request.headers["Authorization"]
+    if not token:
+        return BaseModel.ErrorResult("no token supplied")
     result = User.decode_access_token(token.split(" ")[1])
     user = User.find_by_id(result.value["id"])
+    if not user:
+        return BaseModel.ErrorResult(f"no user found with id {result.value['id']}")
     return BaseModel.SuccessResult(user.to_json())
 
 
