@@ -1,6 +1,6 @@
 from flask import Response, jsonify
 from flask_restx import Model
-from flask_restx.fields import Boolean, Nested, String
+from flask_restx.fields import Boolean, List, Nested, String
 
 
 class BaseModel:
@@ -12,6 +12,16 @@ class BaseModel:
         return Model(
             self.name,
             {"success": Boolean, "message": String, "data": Nested(self.dataModel)},
+        )
+
+    def list_model(self) -> Model:
+        return Model(
+            self.name,
+            {
+                "success": Boolean,
+                "message": String,
+                "data": List(Nested(self.dataModel)),
+            },
         )
 
     @classmethod
