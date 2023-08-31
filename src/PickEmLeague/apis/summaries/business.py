@@ -9,11 +9,11 @@ def get_week_summaries(week: int):
     users = User.find_all()
     summaries = []
     for user in users:
-        summaries.append(week_summary_for_user(week, user))
+        summaries.append(_week_summary_for_user(week, user))
     return BaseModel.SuccessResult(summaries)
 
 
-def week_summary_for_user(week: int, user: User):
+def _week_summary_for_user(week: int, user: User):
     games = Game.find_by_week(week)
     game_picks = GamePick.find_by_user_and_week(user, week)
     score, correct = 0, 0
