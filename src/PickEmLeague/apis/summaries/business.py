@@ -1,6 +1,8 @@
+from src.PickEmLeague.models.enums import GameResult
 from src.PickEmLeague.models.game import Game
 from src.PickEmLeague.models.game_pick import GamePick
 from src.PickEmLeague.models.user import User
+from src.PickEmLeague.schemas.core.base_schema import BaseModel
 
 
 def get_week_summaries(week: int):
@@ -8,7 +10,7 @@ def get_week_summaries(week: int):
     summaries = []
     for user in users:
         summaries.append(week_summary_for_user(week, user))
-    return summaries
+    return BaseModel.SuccessResult(summaries)
 
 
 def week_summary_for_user(week: int, user: User):
@@ -16,10 +18,12 @@ def week_summary_for_user(week: int, user: User):
     game_picks = GamePick.find_by_user_and_week(user, week)
     score, correct = 0, 0
     for g in games:
-        gp = next((x for x in game_picks if x.game_id == g.id), None)
+        gp = [x for x in game_picks if x.game == g][0]
         if gp:
+            if g.result == GameResult.NOT_PLAYED:
+                continue
             if gp.pick == g.result:
-                score += gp.amount
+                score += gp.amount if gp.amount else 0
                 correct += 1
         else:
             # Throw error?

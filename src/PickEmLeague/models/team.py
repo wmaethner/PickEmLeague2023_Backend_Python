@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import List
 
+from sqlalchemy import select
+
 from src.PickEmLeague import db
 
 
@@ -29,4 +31,4 @@ class Team(db.Model):
 
     @classmethod
     def find_all(cls) -> List["Team"]:
-        return cls.query.all()
+        return db.session.scalars(select(cls)).all()
