@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import List, Optional
 
@@ -8,8 +9,15 @@ from src.PickEmLeague import bcrypt, db
 from src.PickEmLeague.util.result import Result
 
 
+@dataclass
 class User(db.Model):
     __tablename__ = "users"
+    id: int
+    first_name: str
+    last_name: str
+    email: str
+    username: str
+    admin: bool
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(255), nullable=False)
@@ -47,16 +55,6 @@ class User(db.Model):
         key = current_app.config.get("SECRET_KEY")
         # return bytes(jwt.encode(payload, key, algorithm="HS256"), "utf-8")
         return jwt.encode(payload, key, algorithm="HS256")
-
-    def to_json(self):
-        return {
-            "id": self.id,
-            "username": self.username,
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "email": self.email,
-            "admin": self.admin,
-        }
 
     @staticmethod
     def decode_access_token(access_token):

@@ -1,4 +1,7 @@
+from dataclasses import dataclass
 from typing import List
+
+from sqlalchemy.orm import Mapped
 
 from src.PickEmLeague import db
 from src.PickEmLeague.models.enums import GameResult, IntEnum
@@ -9,8 +12,14 @@ from .game import Game
 # TODO: Add databse validation on these records to prevent duplicates for user/game (unique index?)
 
 
+@dataclass
 class GamePick(db.Model):
     __tablename__ = "game_picks"
+    id: int
+    user: Mapped[User]
+    game: Mapped[Game]
+    pick: int
+    amount: int
 
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))

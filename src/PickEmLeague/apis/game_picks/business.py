@@ -1,6 +1,6 @@
-from src.PickEmLeague.apis.core.base_model import BaseModel
 from src.PickEmLeague.models.game_pick import GamePick
 from src.PickEmLeague.models.user import User
+from src.PickEmLeague.schemas.core.base_schema import BaseModel
 
 
 def get_game_pick_list():

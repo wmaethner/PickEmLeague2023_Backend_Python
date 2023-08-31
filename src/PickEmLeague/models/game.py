@@ -1,12 +1,23 @@
+from dataclasses import dataclass
+from datetime import datetime
 from typing import List
+
+from sqlalchemy.orm import Mapped
 
 from src.PickEmLeague import db
 from src.PickEmLeague.models.enums import GameResult
 from src.PickEmLeague.models.team import Team
 
 
+@dataclass
 class Game(db.Model):
     __tablename__ = "games"
+    id: int
+    game_time: Mapped[datetime]
+    week: int
+    result: int
+    home_team: Mapped[Team]
+    away_team: Mapped[Team]
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     game_time = db.Column(db.DateTime)

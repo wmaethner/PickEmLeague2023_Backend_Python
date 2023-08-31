@@ -1,18 +1,16 @@
-from http import HTTPStatus
-
-from flask import request
-from flask_restx import Namespace, Resource
+from flask import jsonify, request
+from flask_restx import Resource
 
 from src.PickEmLeague.decorators.auth import token_required
 from src.PickEmLeague.models.user import User
+from src.PickEmLeague.schemas.users.user_list_schema import user_list_model
+from src.PickEmLeague.schemas.users.user_schema import user_model, user_schema
 
+from ..core.base_namespace import BaseNamespace
 from .business import get_current_user, get_user_list
-from .dtos.user_model import user_data, user_list_model, user_model
 
-user_ns = Namespace(name="users", validate=True)
-user_ns.models[user_data.name] = user_data
-user_ns.models[user_model.name] = user_model
-user_ns.models[user_list_model.name] = user_list_model
+user_ns = BaseNamespace(name="users", validate=True)
+user_ns.add_models([user_schema, user_model, user_list_model])
 
 
 @user_ns.route("/current")
@@ -30,6 +28,20 @@ class UserList(Resource):
     def get(self):
         """Retrieve a list of users."""
         user_ns.logger.info("Getting user list")
+        return get_user_list()
+
+
+@user_ns.route("/<int:id>")
+class UserById(Resource):
+    @user_ns.marshal_with(user_model)
+    def get(self, id):
+        """Retrieve a list of users."""
+        user_ns.logger.info("Getting user list")
+        try:
+            user = jsonify(User.find_by_id(id))
+            print(user.data)
+        except Exception as e:
+            print(e)
         return get_user_list()
 
 

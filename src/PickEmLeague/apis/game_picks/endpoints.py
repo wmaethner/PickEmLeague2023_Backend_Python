@@ -3,17 +3,23 @@ from http import HTTPStatus
 from flask_restx import Namespace, Resource
 
 from src.PickEmLeague import db
+from src.PickEmLeague.schemas.game_picks.game_pick_list_schema import (
+    game_pick_list_model,
+)
+from src.PickEmLeague.schemas.game_picks.game_pick_schema import (
+    game_pick_model,
+    game_pick_schema,
+)
 
+from ..core.base_namespace import BaseNamespace
 from .business import (
     get_game_pick_list,
     get_game_picks_by_user_and_week,
     get_game_picks_by_week,
 )
-from .dtos.game_pick_model import game_pick_data, game_pick_model
 
-game_picks_ns = Namespace(name="game_picks", validate=True)
-game_picks_ns.models[game_pick_data.name] = game_pick_data
-game_picks_ns.models[game_pick_model.name] = game_pick_model
+game_picks_ns = BaseNamespace(name="game_picks", validate=True)
+game_picks_ns.add_models([game_pick_schema, game_pick_model, game_pick_list_model])
 
 
 @game_picks_ns.route("")

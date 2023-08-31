@@ -1,10 +1,16 @@
+from dataclasses import dataclass
 from typing import List
 
 from src.PickEmLeague import db
 
 
+@dataclass
 class Team(db.Model):
     __tablename__ = "teams"
+    id: int
+    name: str
+    city: str
+    abbreviation: str
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)

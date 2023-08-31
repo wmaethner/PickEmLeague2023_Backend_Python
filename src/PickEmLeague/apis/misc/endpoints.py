@@ -4,13 +4,13 @@ from flask import current_app, request
 from flask_restx import Namespace, Resource
 
 from src.PickEmLeague import db
-from src.PickEmLeague.apis.core.base_model import BaseModel
+from src.PickEmLeague.schemas.core.base_schema import BaseModel
+from src.PickEmLeague.schemas.misc.misc_schema import misc_model, misc_schema
 
-from .dtos.misc_model import misc_data, misc_model
+from ..core.base_namespace import BaseNamespace
 
-misc_ns = Namespace(name="misc", validate=True)
-misc_ns.models[misc_data.name] = misc_data
-misc_ns.models[misc_model.name] = misc_model
+misc_ns = BaseNamespace(name="misc", validate=True)
+misc_ns.add_models([misc_schema, misc_model])
 
 
 @misc_ns.route("")

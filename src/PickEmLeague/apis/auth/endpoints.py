@@ -2,14 +2,14 @@ from flask import jsonify
 from flask_restx import Namespace, Resource
 
 from src.PickEmLeague.models.user import User
+from src.PickEmLeague.schemas.auth.auth_schema import auth_model, auth_schema
 
+from ..core.base_namespace import BaseNamespace
 from .business import login_user, register_user
-from .dtos.auth_model import auth_data, auth_model
-from .dtos.parsers import auth_login_parser, auth_register_parser
+from .parsers import auth_login_parser, auth_register_parser
 
-auth_ns = Namespace(name="auth", validate=True)
-auth_ns.models[auth_data.name] = auth_data
-auth_ns.models[auth_model.name] = auth_model
+auth_ns = BaseNamespace(name="auth", validate=True)
+auth_ns.add_models([auth_schema, auth_model])
 
 
 @auth_ns.route("/register")

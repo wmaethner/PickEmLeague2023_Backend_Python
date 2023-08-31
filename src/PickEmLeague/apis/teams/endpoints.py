@@ -1,32 +1,22 @@
-import logging
-from http import HTTPStatus
-from typing import List
-
-from flask import current_app, request
-from flask_restx import Namespace, Resource
+from flask_restx import Resource
 
 from src.PickEmLeague import db
-from src.PickEmLeague.models.team import Team as TeamObject
+from src.PickEmLeague.models.team import Team
+from src.PickEmLeague.schemas.teams.team_list_schema import team_list_model
+from src.PickEmLeague.schemas.teams.team_schema import team_model, team_schema
 
+from ..core.base_namespace import BaseNamespace
 from .business import get_team_list
-from .dtos.parsers import team_list_upload_parser
-from .dtos.team_model import team_model
+from .parsers import team_list_upload_parser
 
-team_ns = Namespace(name="teams", validate=True)
-team_ns.models[team_model.name] = team_model
+team_ns = BaseNamespace(name="teams", validate=True)
+team_ns.add_models([team_schema, team_model, team_list_model])
 
 
 @team_ns.route("")
 class TeamList(Resource):
-    @team_ns.response(HTTPStatus.OK, "Retrieved team list.", [team_model])
-    @team_ns.marshal_list_with(team_model)
+    @team_ns.marshal_with(team_list_model)
     def get(self):
-        """Retrieve a list of users."""
-        print("Get team list")
-        logging.info("Team list logging")
-        current_app.logger.debug("Current app team list")
-        current_app.logger.error("Current app team list")
-        team_ns.logger.info("hello from ns1")
         return get_team_list()
 
     @team_ns.expect(team_list_upload_parser)
@@ -35,7 +25,7 @@ class TeamList(Resource):
         file = args["team-file"]
         for line in [l.strip() for l in file.readlines()][1::]:
             parts = line.decode("utf-8").split(",")
-            new_team = TeamObject(
+            new_team = Team(
                 id=int(parts[0]),
                 name=parts[1].split(" ")[-1],
                 city=" ".join(parts[1].split(" ")[0:-1]),
@@ -47,17 +37,17 @@ class TeamList(Resource):
             db.session.commit()
 
 
-@team_ns.route("/by_id/<id>")
-@team_ns.param("id", "Team ID")
-class TeamById(Resource):
-    @team_ns.marshal_with(team_model)
-    def get(self, id):
-        return TeamObject.find_by_id(id)
+# @team_ns.route("/by_id/<id>")
+# @team_ns.param("id", "Team ID")
+# class TeamById(Resource):
+#     @team_ns.marshal_with(team_model)
+#     def get(self, id):
+#         return TeamObject.find_by_id(id)
 
 
-@team_ns.route("/by_abbr/<abbr>")
-@team_ns.param("abbr", "Team abbreviation")
-class TeamByAbbr(Resource):
-    @team_ns.marshal_with(team_model)
-    def get(self, abbr):
-        return TeamObject.find_by_abbreviation(abbr)
+# @team_ns.route("/by_abbr/<abbr>")
+# @team_ns.param("abbr", "Team abbreviation")
+# class TeamByAbbr(Resource):
+#     @team_ns.marshal_with(team_model)
+#     def get(self, abbr):
+#         return TeamObject.find_by_abbreviation(abbr)

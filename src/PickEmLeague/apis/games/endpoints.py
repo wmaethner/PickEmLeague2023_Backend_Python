@@ -1,21 +1,29 @@
+from flask import jsonify
 from flask_restx import Namespace, Resource
 
 from src.PickEmLeague import db
 from src.PickEmLeague.models.game import Game
 from src.PickEmLeague.models.team import Team
+from src.PickEmLeague.schemas.games.game_list_schema import game_list_model
+from src.PickEmLeague.schemas.games.game_schema import game_model, game_schema
 
-from .business import get_game_list
-from .dtos.game_model import game_model
-from .dtos.parsers import game_list_upload_parser
+from ..core.base_namespace import BaseNamespace
+from .business import get_game_list, get_games_by_week
+from .parsers import game_list_upload_parser
 
-game_ns = Namespace(name="games", validate=True)
-game_ns.models[game_model.name] = game_model
+game_ns = BaseNamespace(name="games", validate=True)
+game_ns.add_models([game_schema, game_model, game_list_model])
+
+
+@game_ns.errorhandler
+def error_handler(error):
+    print(error)
+    return {"message": str(error)}, getattr(error, "code", 500)
 
 
 @game_ns.route("")
 class GameList(Resource):
-    # @game_ns.response(HTTPStatus.OK, "Retrieved team list.", team_model)
-    @game_ns.marshal_list_with(game_model)
+    @game_ns.marshal_with(game_list_model)
     def get(self):
         """Retrieve a list of games."""
         return get_game_list()
@@ -54,9 +62,14 @@ class GameList(Resource):
 @game_ns.route("/<week>")
 @game_ns.param("week", "Week number")
 class GamesByWeek(Resource):
-    @game_ns.marshal_list_with(game_model)
+    @game_ns.marshal_with(game_list_model)
     def get(self, week):
-        return Game.find_by_week(week)
+        try:
+            games = Game.find_by_week(week)
+            print(jsonify(games).data)
+        except Exception as e:
+            print(e)
+        return get_games_by_week(week)
 
 
 @game_ns.route("/<week>/<abbr>")

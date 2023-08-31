@@ -1,10 +1,10 @@
 from flask import current_app
 
 from src.PickEmLeague import db
-from src.PickEmLeague.apis.core.base_model import BaseModel
 from src.PickEmLeague.models.game import Game
 from src.PickEmLeague.models.game_pick import GamePick
 from src.PickEmLeague.models.user import User
+from src.PickEmLeague.schemas.core.base_schema import BaseModel
 
 
 def register_user(first: str, last: str, email: str, username: str, password: str):

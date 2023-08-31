@@ -4,8 +4,8 @@ from flask import jsonify
 from flask_restx import abort
 
 from src.PickEmLeague import db
-from src.PickEmLeague.apis.core.base_model import BaseModel
 from src.PickEmLeague.models.user import User
+from src.PickEmLeague.schemas.core.base_schema import BaseModel
 
 
 def get_current_user(request):
@@ -35,4 +35,5 @@ def create_user(user_dict):
 
 def get_user_list():
     users = User.find_all()
-    return BaseModel.SuccessResult([user.to_json() for user in users])
+    # return BaseModel.SuccessResult([user.to_json() for user in users])
+    return BaseModel.SuccessResult(users)

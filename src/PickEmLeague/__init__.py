@@ -44,4 +44,12 @@ def create_app(config_name):
     with application.app_context():
         flask_migrate.upgrade(directory="src/PickEmLeague/migrations")
 
+    @application.before_request
+    def before():
+        print("Factory app before request")
+
+    @application.errorhandler(Exception)
+    def error(e):
+        print("Error")
+
     return application
