@@ -31,7 +31,7 @@ class GamePickList(Resource):
         return get_game_pick_list()
 
 
-@game_picks_ns.route("/<week>")
+@game_picks_ns.route("/<int:week>")
 @game_picks_ns.param("week", "Week number")
 class GamePicksByWeek(Resource):
     @game_picks_ns.marshal_list_with(game_pick_model)
@@ -39,7 +39,7 @@ class GamePicksByWeek(Resource):
         return get_game_picks_by_week(week)
 
 
-@game_picks_ns.route("/<week>/<user_id>")
+@game_picks_ns.route("/<int:week>/<int:user_id>")
 @game_picks_ns.param("week", "Week number")
 @game_picks_ns.param("user_id", "User ID")
 class GamePicksByUserAndWeek(Resource):

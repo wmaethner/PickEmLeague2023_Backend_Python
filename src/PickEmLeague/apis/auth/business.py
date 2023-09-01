@@ -23,10 +23,11 @@ def register_user(first: str, last: str, email: str, username: str, password: st
     db.session.commit()
 
     # initialize game picks
-    games = Game.find_all()
-    for game in games:
-        gp = GamePick(user=new_user, game=game)
-        db.session.add(gp)
+    for week in range(1, 19):
+        games = Game.find_by_week(week)
+        for index, game in enumerate(games):
+            gp = GamePick(user=new_user, game=game, amount=index + 1)
+            db.session.add(gp)
     db.session.commit()
 
     access_token = new_user.encode_access_token()

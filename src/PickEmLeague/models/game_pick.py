@@ -45,7 +45,9 @@ class GamePick(db.Model):
 
     @classmethod
     def find_by_week(cls, week: int) -> List["GamePick"]:
-        return cls.query.filter(cls.game.week == week).all()
+        return db.session.scalars(
+            select(cls).where(GamePick.game.has(Game.week == week))
+        ).all()
 
     @classmethod
     def find_by_user_and_week(cls, user: User, week: int) -> List["GamePick"]:
