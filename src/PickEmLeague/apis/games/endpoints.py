@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, request
 from flask_restx import Namespace, Resource
 
 from src.PickEmLeague import db
@@ -8,7 +8,7 @@ from src.PickEmLeague.schemas.games.game_list_schema import game_list_model
 from src.PickEmLeague.schemas.games.game_schema import game_model, game_schema
 
 from ..core.base_namespace import BaseNamespace
-from .business import get_game_list, get_games_by_week
+from .business import get_game_by_id, get_game_list, get_games_by_week, update_game
 from .parsers import game_list_upload_parser
 
 game_ns = BaseNamespace(name="games", validate=True)
@@ -19,6 +19,18 @@ game_ns.add_models([game_schema, game_model, game_list_model])
 def error_handler(error):
     print(error)
     return {"message": str(error)}, getattr(error, "code", 500)
+
+
+@game_ns.route("/<int:id>")
+class GameById(Resource):
+    @game_ns.marshal_with(game_model)
+    def get(self, id):
+        return get_game_by_id(id)
+
+    @game_ns.expect(game_schema)
+    def put(self, id):
+        print(request.get_json()["id"])
+        update_game(id, request.get_json())
 
 
 @game_ns.route("")
@@ -64,11 +76,6 @@ class GameList(Resource):
 class GamesByWeek(Resource):
     @game_ns.marshal_with(game_list_model)
     def get(self, week):
-        try:
-            games = Game.find_by_week(week)
-            print(jsonify(games).data)
-        except Exception as e:
-            print(e)
         return get_games_by_week(week)
 
 

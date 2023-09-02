@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped
 
 from src.PickEmLeague import db
@@ -13,20 +14,28 @@ from src.PickEmLeague.models.team import Team
 class Game(db.Model):
     __tablename__ = "games"
     id: int
-    game_time: Mapped[datetime]
     week: int
     result: int
     home_team: Mapped[Team]
     away_team: Mapped[Team]
+    game_time: Mapped[datetime]
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    game_time = db.Column(db.DateTime)
     week = db.Column(db.Integer)
     result = db.Column(db.Enum(GameResult), default=GameResult.NOT_PLAYED)
     home_team_id = db.Column(db.Integer, db.ForeignKey("teams.id"))
     home_team = db.relationship("Team", lazy=True, foreign_keys=[home_team_id])
     away_team_id = db.Column(db.Integer, db.ForeignKey("teams.id"))
     away_team = db.relationship("Team", lazy=True, foreign_keys=[away_team_id])
+    _game_time = db.Column("game_time", db.DateTime)
+
+    @property
+    def game_time(self):
+        return self._game_time.isoformat() if self._game_time else ""
+
+    @game_time.setter
+    def game_time(self, game_time):
+        self._game_time = datetime.fromisoformat(game_time)
 
     @classmethod
     def find_by_id(cls, id: int) -> "Game":

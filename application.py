@@ -43,12 +43,13 @@ def index():
 
 @application.before_request
 def log_request_start():
-    print(f"{datetime.datetime.fromtimestamp(time.time())}: {request.url}")
+    # print(f"{datetime.datetime.fromtimestamp(time.time())}: {request.url}")
+    pass
 
 
 @application.after_request
 def log_request_end(response: Response):
-    print(f"{datetime.datetime.fromtimestamp(time.time())}: {response.json}")
+    # print(f"{datetime.datetime.fromtimestamp(time.time())}: {response.json}")
     return response
 
 
