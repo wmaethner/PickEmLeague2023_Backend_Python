@@ -27,9 +27,10 @@ def update_game_picks_by_user_and_week(user_id: int, week: int, game_pick_data: 
     user = User.find_by_id(user_id)
     game_picks = GamePick.find_by_user_and_week(user, week)
     print(len(game_picks))
+    # reversed()
     for index, pick_data in enumerate(game_pick_data):
         game_pick = GamePick.find_by_id(pick_data["id"])
-        game_pick.amount = index + 1
+        game_pick.amount = len(game_picks) - index
     db.session.commit()
     return BaseModel.SuccessResult(GamePick.find_by_user_and_week(user, week))
 

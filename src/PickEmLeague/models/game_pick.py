@@ -55,11 +55,7 @@ class GamePick(db.Model):
         user_picks = db.session.scalars(
             select(cls).where(cls.user == user).order_by(desc(cls.amount))
         ).all()
-        # print(user_picks)
-        print("got user picks")
         results = [gp for gp in user_picks if gp.game.week == week]
-        print("got results")
-        # print(results)
         return results
 
     @classmethod
