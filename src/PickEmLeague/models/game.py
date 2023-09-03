@@ -36,11 +36,7 @@ class Game(db.Model):
 
     @game_time.setter
     def game_time(self, game_time):
-        self._game_time = (
-            datetime.fromisoformat(game_time)
-            .astimezone(timezone.utc)
-            .replace(tzinfo=None)
-        )
+        self._game_time = datetime.fromisoformat(game_time).replace(tzinfo=None)
 
     @classmethod
     def find_by_id(cls, id: int) -> "Game":
