@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from sqlalchemy import select
+from sqlalchemy import desc, select
 from sqlalchemy.orm import Mapped
 
 from src.PickEmLeague import db
@@ -53,7 +53,7 @@ class GamePick(db.Model):
     def find_by_user_and_week(cls, user: User, week: int) -> List["GamePick"]:
         # return cls.query.filter((cls.user == user) & (cls.game.week == week)).all()
         user_picks = db.session.scalars(
-            select(cls).where(cls.user == user).order_by(cls.amount)
+            select(cls).where(cls.user == user).order_by(desc(cls.amount))
         ).all()
         # print(user_picks)
         print("got user picks")
