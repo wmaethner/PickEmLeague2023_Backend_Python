@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List
 
+from sqlalchemy import select
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped
 
@@ -35,7 +36,11 @@ class Game(db.Model):
 
     @game_time.setter
     def game_time(self, game_time):
-        self._game_time = datetime.fromisoformat(game_time)
+        self._game_time = (
+            datetime.fromisoformat(game_time)
+            .astimezone(timezone.utc)
+            .replace(tzinfo=None)
+        )
 
     @classmethod
     def find_by_id(cls, id: int) -> "Game":
@@ -43,7 +48,7 @@ class Game(db.Model):
 
     @classmethod
     def find_by_week(cls, week: int) -> List["Game"]:
-        return cls.query.filter_by(week=week).all()
+        return db.session.scalars(select(cls).where(cls.week == week)).all()
 
     @classmethod
     def find_all(cls) -> List["Game"]:

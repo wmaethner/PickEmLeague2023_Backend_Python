@@ -8,7 +8,14 @@ from src.PickEmLeague.schemas.games.game_list_schema import game_list_model
 from src.PickEmLeague.schemas.games.game_schema import game_model, game_schema
 
 from ..core.base_namespace import BaseNamespace
-from .business import get_game_by_id, get_game_list, get_games_by_week, update_game
+from .business import (
+    get_game_by_id,
+    get_game_list,
+    get_games_by_week,
+    load_games_from_csv,
+    load_games_from_file,
+    update_game,
+)
 from .parsers import game_list_upload_parser
 
 game_ns = BaseNamespace(name="games", validate=True)
@@ -29,7 +36,6 @@ class GameById(Resource):
 
     @game_ns.expect(game_schema)
     def put(self, id):
-        print(request.get_json()["id"])
         update_game(id, request.get_json())
 
 
@@ -44,34 +50,12 @@ class GameList(Resource):
     def post(self):
         args = game_list_upload_parser.parse_args()
         file = args["game-file"]
-
-        for line in [l.decode("utf-8").strip() for l in file.readlines()]:
-            parts = line.split(",")
-            team = Team.find_by_abbreviation(parts[0])
-
-            for week in range(1, 19):
-                # Check for bye
-                if parts[week] == "BYE":
-                    continue
-
-                # Check if team has game for week already
-                if Game.find_by_week_and_team(week, team):
-                    continue
-
-                team_is_home = parts[week][0] != "@"
-                other = Team.find_by_abbreviation(
-                    parts[week] if team_is_home else parts[week][1:]
-                )
-                new_game = Game(
-                    week=week,
-                    home_team=team if team_is_home else other,
-                    away_team=other if team_is_home else team,
-                )
-                db.session.add(new_game)
-                db.session.commit()
+        # load_games_from_file(file)
+        load_games_from_csv(file)
+        return {}
 
 
-@game_ns.route("/<week>")
+@game_ns.route("/by_week/<week>")
 @game_ns.param("week", "Week number")
 class GamesByWeek(Resource):
     @game_ns.marshal_with(game_list_model)
