@@ -15,14 +15,14 @@ def get_week_summaries(week: int):
 
 def get_season_summaries():
     users = User.find_all()
+    games = Game.find_all()
     summaries = []
     for user in users:
-        summaries.append(_season_summary_for_user(user))
+        summaries.append(_season_summary_for_user(user, games))
     return BaseModel.SuccessResult(summaries)
 
 
-def _season_summary_for_user(user: User):
-    games = Game.find_all()
+def _season_summary_for_user(user: User, games: [Game]):
     game_picks = GamePick.find_by_user(user)
     score, correct = 0, 0
     for g in games:
