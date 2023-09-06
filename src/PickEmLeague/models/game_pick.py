@@ -51,12 +51,17 @@ class GamePick(db.Model):
 
     @classmethod
     def find_by_user_and_week(cls, user: User, week: int) -> List["GamePick"]:
-        # return cls.query.filter((cls.user == user) & (cls.game.week == week)).all()
         user_picks = db.session.scalars(
             select(cls).where(cls.user == user).order_by(desc(cls.amount))
         ).all()
         results = [gp for gp in user_picks if gp.game.week == week]
         return results
+
+    @classmethod
+    def find_by_user(cls, user: User) -> List["GamePick"]:
+        return db.session.scalars(
+            select(cls).where(cls.user == user).order_by(desc(cls.amount))
+        ).all()
 
     @classmethod
     def find_all(cls) -> List["GamePick"]:

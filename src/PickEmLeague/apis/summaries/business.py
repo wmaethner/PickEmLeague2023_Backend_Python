@@ -17,17 +17,26 @@ def get_season_summaries():
     users = User.find_all()
     summaries = []
     for user in users:
-        user_summaries = []
-        for week in range(1, 19):
-            user_summaries.append(_week_summary_for_user(week, user))
-        summaries.append(
-            {
-                "user": user,
-                "score": sum([x["score"] for x in user_summaries]),
-                "correct_picks": sum([x["correct_picks"] for x in user_summaries]),
-            }
-        )
+        summaries.append(_season_summary_for_user(user))
     return BaseModel.SuccessResult(summaries)
+
+
+def _season_summary_for_user(user: User):
+    games = Game.find_all()
+    game_picks = GamePick.find_by_user(user)
+    score, correct = 0, 0
+    for g in games:
+        gp = [x for x in game_picks if x.game == g][0]
+        if gp:
+            if g.result == GameResult.NOT_PLAYED:
+                continue
+            if gp.pick == g.result:
+                score += gp.amount if gp.amount else 0
+                correct += 1
+        else:
+            # Throw error?
+            pass
+    return {"user": user, "score": score, "correct_picks": correct}
 
 
 def _week_summary_for_user(week: int, user: User):
