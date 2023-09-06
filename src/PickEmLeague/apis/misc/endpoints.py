@@ -17,4 +17,4 @@ misc_ns.add_models([misc_schema, misc_model])
 class MiscInfo(Resource):
     @misc_ns.marshal_with(misc_model)
     def get(self):
-        return BaseModel.SuccessResult({"started": False})
+        return BaseModel.SuccessResult({"started": True})
