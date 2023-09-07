@@ -23,8 +23,8 @@ class GamePick(db.Model):
     amount: int
 
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    user = db.relationship("User", lazy=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"))
+    user = db.relationship("User", lazy=True, cascade="delete")
     game_id = db.Column(db.Integer, db.ForeignKey("games.id"))
     game = db.relationship("Game", lazy=True)
     pick = db.Column(IntEnum(GameResult), default=GameResult.NOT_PLAYED)
