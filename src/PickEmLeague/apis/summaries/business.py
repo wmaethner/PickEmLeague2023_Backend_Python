@@ -1,3 +1,5 @@
+from timeit import default_timer as timer
+
 from src.PickEmLeague.models.enums import GameResult
 from src.PickEmLeague.models.game import Game
 from src.PickEmLeague.models.game_pick import GamePick
@@ -7,9 +9,10 @@ from src.PickEmLeague.schemas.core.base_schema import BaseModel
 
 def get_week_summaries(week: int):
     users = User.find_all()
+    games = Game.find_by_week(week)
     summaries = []
     for user in users:
-        summaries.append(_week_summary_for_user(week, user))
+        summaries.append(_week_summary_for_user(week, user, games))
     return BaseModel.SuccessResult(summaries)
 
 
@@ -39,8 +42,7 @@ def _season_summary_for_user(user: User, games: [Game]):
     return {"user": user, "score": score, "correct_picks": correct}
 
 
-def _week_summary_for_user(week: int, user: User):
-    games = Game.find_by_week(week)
+def _week_summary_for_user(week: int, user: User, games: [Game]):
     game_picks = GamePick.find_by_user_and_week(user, week)
     score, correct = 0, 0
     for g in games:

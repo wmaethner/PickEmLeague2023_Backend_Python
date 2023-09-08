@@ -30,15 +30,6 @@ class GamePick(db.Model):
     pick = db.Column(IntEnum(GameResult), default=GameResult.NOT_PLAYED)
     amount = db.Column(db.Integer)
 
-    def to_json(self):
-        return {
-            "id": self.id,
-            "user_id": self.user_id,
-            "game_id": self.game_id,
-            "pick": self.pick,
-            "amount": self.amount,
-        }
-
     @classmethod
     def find_by_id(cls, id: int) -> "GamePick":
         return cls.query.filter_by(id=id).first()
@@ -51,11 +42,11 @@ class GamePick(db.Model):
 
     @classmethod
     def find_by_user_and_week(cls, user: User, week: int) -> List["GamePick"]:
-        user_picks = db.session.scalars(
-            select(cls).where(cls.user == user).order_by(desc(cls.amount))
+        return db.session.scalars(
+            select(cls)
+            .where(cls.user == user)
+            .where(GamePick.game.has(Game.week == week))
         ).all()
-        results = [gp for gp in user_picks if gp.game.week == week]
-        return results
 
     @classmethod
     def find_by_user(cls, user: User) -> List["GamePick"]:

@@ -4,6 +4,7 @@ from typing import List, Optional
 
 import jwt
 from flask import current_app
+from sqlalchemy import select
 
 from src.PickEmLeague import bcrypt, db
 from src.PickEmLeague.util.result import Result
@@ -101,7 +102,7 @@ class User(db.Model):
 
     @classmethod
     def find_all(cls) -> List["User"]:
-        return cls.query.all()
+        return db.session.scalars(select(cls)).all()
 
     @classmethod
     def clear_all(cls) -> int:
