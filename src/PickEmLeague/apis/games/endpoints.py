@@ -55,7 +55,7 @@ class GameList(Resource):
         return {}
 
 
-@game_ns.route("/by_week/<week>")
+@game_ns.route("/by_week/<int:week>")
 @game_ns.param("week", "Week number")
 class GamesByWeek(Resource):
     @game_ns.marshal_with(game_list_model)
