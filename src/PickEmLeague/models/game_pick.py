@@ -46,6 +46,7 @@ class GamePick(db.Model):
             select(cls)
             .where(cls.user == user)
             .where(GamePick.game.has(Game.week == week))
+            .order_by(desc(cls.amount))
         ).all()
 
     @classmethod
