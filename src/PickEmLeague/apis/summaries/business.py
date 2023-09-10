@@ -34,6 +34,7 @@ def get_season_summaries():
     summaries = []
     for user in users:
         summaries.append(_season_summary_for_user(user))
+    summaries.sort(key=lambda x: x["score"], reverse=True)
     return BaseModel.SuccessResult(summaries)
 
 
