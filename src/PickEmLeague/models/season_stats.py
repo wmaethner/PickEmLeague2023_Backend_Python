@@ -27,10 +27,8 @@ class SeasonStats(db.Model):
         return cls.query.filter_by(id=id).first()
 
     @classmethod
-    def find_by_user(cls, user: User) -> List["SeasonStats"]:
-        return db.session.scalars(
-            select(cls).where(cls.user == user).order_by(desc(cls.score))
-        ).all()
+    def find_by_user(cls, user: User) -> "SeasonStats":
+        return db.session.scalars(select(cls).where(cls.user == user)).first()
 
     @classmethod
     def find_all(cls) -> List["SeasonStats"]:

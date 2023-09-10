@@ -56,5 +56,9 @@ class GamePick(db.Model):
         ).all()
 
     @classmethod
+    def find_by_game(cls, game: Game) -> List["GamePick"]:
+        return db.session.scalars(select(cls).where(cls.game == game)).all()
+
+    @classmethod
     def find_all(cls) -> List["GamePick"]:
         return cls.query.all()

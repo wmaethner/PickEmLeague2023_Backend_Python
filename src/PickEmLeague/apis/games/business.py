@@ -4,6 +4,8 @@ import pytz
 
 from src.PickEmLeague import db
 from src.PickEmLeague.models.game import Game
+from src.PickEmLeague.models.game_pick import GamePick
+from src.PickEmLeague.models.season_stats import SeasonStats
 from src.PickEmLeague.models.team import Team
 from src.PickEmLeague.schemas.core.base_schema import BaseModel
 from src.PickEmLeague.util.models import update_model
@@ -25,7 +27,9 @@ def update_game(id: int, game_data: any):
     game = Game.find_by_id(id)
     if game:
         update_model(game, game_data, ["result", "game_time"], db)
-        return BaseModel.SuccessResult(Game.find_by_id(id))
+        game = Game.find_by_id(id)
+        _update_user_season_scores(game)
+        return BaseModel.SuccessResult(game)
     return BaseModel.ErrorResult(f"Game with id {id} not found")
 
 
@@ -97,3 +101,13 @@ def load_games_from_csv(file):
         db.session.commit()
     except Exception as e:
         print(e)
+
+
+def _update_user_season_scores(game: Game):
+    game_picks = GamePick.find_by_game(game)
+    for gp in game_picks:
+        if gp.pick == game.result:
+            season_stats = SeasonStats.find_by_user(gp.user)
+            season_stats.score += gp.amount
+            season_stats.correct_picks += 1
+            db.session.commit()
