@@ -13,7 +13,7 @@ def get_week_summaries(week: int):
     summaries = []
     for user in users:
         summaries.append(_week_summary_for_user(week, user, games))
-    return BaseModel.SuccessResult(summaries)
+    return BaseModel.SuccessResult(summaries.sort(key=lambda x: x["score"]))
 
 
 def get_week_pick_statuses(week: int):
