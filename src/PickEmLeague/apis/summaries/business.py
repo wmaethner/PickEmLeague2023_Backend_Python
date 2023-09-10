@@ -13,7 +13,7 @@ def get_week_summaries(week: int):
     summaries = []
     for user in users:
         summaries.append(_week_summary_for_user(week, user, games))
-    summaries.sort(key=lambda x: x["score"])
+    summaries.sort(key=lambda x: x["score"], reverse=True)
     return BaseModel.SuccessResult(summaries)
 
 
