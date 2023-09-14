@@ -38,3 +38,4 @@ deploy:
 
 test:
 	git add ./docs/server_version.txt
+	git commit -m "Update version"
