@@ -1,3 +1,4 @@
+import os
 from http import HTTPStatus
 
 from flask import current_app, request
@@ -10,6 +11,7 @@ from src.PickEmLeague.schemas.misc.misc_schema import (
     misc_schema,
     version_schema,
 )
+from src.PickEmLeague.util.paths import get_project_root
 
 from ..core.base_namespace import BaseNamespace
 
@@ -21,6 +23,14 @@ misc_ns.add_models([misc_schema, version_schema, misc_model])
 class MiscInfo(Resource):
     @misc_ns.marshal_with(misc_model)
     def get(self):
+        ROOT_DIR = get_project_root()
+        file = open(f"{get_project_root()}/docs/server_version.txt")
+        server_version = int(file.read())
+        file.close()
+
         return BaseModel.SuccessResult(
-            {"started": True, "versions": {"ios": 8, "android": 6}}
+            {
+                "started": True,
+                "versions": {"ios": 8, "android": 6, "server": server_version},
+            }
         )
