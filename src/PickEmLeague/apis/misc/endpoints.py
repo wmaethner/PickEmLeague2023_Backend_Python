@@ -23,7 +23,6 @@ misc_ns.add_models([misc_schema, version_schema, misc_model])
 class MiscInfo(Resource):
     @misc_ns.marshal_with(misc_model)
     def get(self):
-        ROOT_DIR = get_project_root()
         file = open(f"{get_project_root()}/docs/server_version.txt")
         server_version = int(file.read())
         file.close()
@@ -31,6 +30,7 @@ class MiscInfo(Resource):
         return BaseModel.SuccessResult(
             {
                 "started": True,
+                "current_week": 2,
                 "versions": {"ios": 8, "android": 6, "server": server_version},
             }
         )

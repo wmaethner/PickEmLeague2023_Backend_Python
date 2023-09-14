@@ -7,7 +7,8 @@ version_schema = Model(
     "VersionSchema", {"ios": Integer, "android": Integer, "server": Integer}
 )
 misc_schema = Model(
-    "MiscSchema", {"started": Boolean, "versions": Nested(version_schema)}
+    "MiscSchema",
+    {"started": Boolean, "current_week": Integer, "versions": Nested(version_schema)},
 )
 
 misc_model = BaseModel("MiscModel", misc_schema).model()
