@@ -5,16 +5,22 @@ from flask_restx import Namespace, Resource
 
 from src.PickEmLeague import db
 from src.PickEmLeague.schemas.core.base_schema import BaseModel
-from src.PickEmLeague.schemas.misc.misc_schema import misc_model, misc_schema
+from src.PickEmLeague.schemas.misc.misc_schema import (
+    misc_model,
+    misc_schema,
+    version_schema,
+)
 
 from ..core.base_namespace import BaseNamespace
 
 misc_ns = BaseNamespace(name="misc", validate=True)
-misc_ns.add_models([misc_schema, misc_model])
+misc_ns.add_models([misc_schema, version_schema, misc_model])
 
 
 @misc_ns.route("")
 class MiscInfo(Resource):
     @misc_ns.marshal_with(misc_model)
     def get(self):
-        return BaseModel.SuccessResult({"started": True})
+        return BaseModel.SuccessResult(
+            {"started": True, "versions": {"ios": 8, "android": 6}}
+        )
