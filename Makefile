@@ -33,4 +33,8 @@ downgrade: venv
 	flask db downgrade
 
 deploy:
+	python3 ./scripts/upgrade_server_version.py	
 	eb deploy --profile personal
+
+test:
+	git add ./docs/server_version.txt
