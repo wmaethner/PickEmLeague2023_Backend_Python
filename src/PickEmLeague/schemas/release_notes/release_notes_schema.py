@@ -16,3 +16,6 @@ release_notes_schema = Model(
 )
 
 release_notes_model = BaseModel("ReleaseNotesModel", release_notes_schema).model()
+release_notes_list_model = BaseModel(
+    "ReleaseNotesListModel", release_notes_schema
+).list_model()

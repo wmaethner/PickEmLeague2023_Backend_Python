@@ -6,6 +6,10 @@ from src.PickEmLeague.models.release_notes_entry import ReleaseNotesEntry
 from src.PickEmLeague.schemas.core.base_schema import BaseModel
 
 
+def get_all_release_notes():
+    return BaseModel.SuccessResult(ReleaseNotes.find_all())
+
+
 def get_release_notes_by_id(id: int):
     return BaseModel.SuccessResult(ReleaseNotes.find_by_id(id))
 
