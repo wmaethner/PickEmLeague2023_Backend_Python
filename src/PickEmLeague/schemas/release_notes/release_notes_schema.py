@@ -3,7 +3,7 @@ from flask_restx.fields import Date, Integer, List, Nested, String
 
 from ..core.base_schema import BaseModel
 
-entry_schema = Model("EntrySchema", {"entry": String})
+entry_schema = Model("EntrySchema", {"id": Integer, "entry": String})
 
 release_notes_schema = Model(
     "ReleaseNotesSchema",
