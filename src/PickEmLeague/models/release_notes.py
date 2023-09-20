@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import date, datetime
 from typing import List
 
-from sqlalchemy import select
+from sqlalchemy import desc, select
 from sqlalchemy.orm import Mapped
 
 from src.PickEmLeague import db
@@ -36,4 +36,4 @@ class ReleaseNotes(db.Model):
 
     @classmethod
     def find_all(cls) -> List["ReleaseNotes"]:
-        return cls.query.all()
+        return db.session.scalars(select(cls).order_by(desc(cls.id))).all()
