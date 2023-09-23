@@ -1,7 +1,7 @@
 from flask import g, jsonify, request
 from flask_restx import Resource, fields
 
-from src.PickEmLeague.decorators.auth import login_required, token_required
+from src.PickEmLeague.decorators.auth import login_required
 from src.PickEmLeague.models.user import User
 from src.PickEmLeague.schemas.core.base_schema import BaseModel
 from src.PickEmLeague.schemas.users.user_list_schema import user_list_model
