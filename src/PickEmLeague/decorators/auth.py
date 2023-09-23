@@ -3,28 +3,16 @@ from functools import wraps
 from flask import g, request
 
 from src.PickEmLeague.models.user import User
+from src.PickEmLeague.schemas.core.base_schema import BaseModel
 
 
-def token_required(f):
+def login_required(f):
     @wraps(f)
-    def decorator(*args, **kwargs):
-        # print("Token required")
-        token = None
-        # print(request.headers)
-        if "Authorization" in request.headers:
-            print(f"Authorizations: {request.headers['Authorization']}")
-            token = request.headers["Authorization"]
-            result = User.decode_access_token(token.split(" ")[1])
-
-            # print(result.value)
-            g.token = token
-            print(result.value["id"])
-            user = User.find_by_id(result.value["id"])
-            print(user)
-            g.user = user
-            # g.
-        # print(token)
-
+    def wrap(*args, **kwargs):
+        if not request.headers["Authorization"]:
+            return BaseModel.ErrorResult("No authorization provided")
+        user = User.authorized_user(request.headers["Authorization"])
+        g.user = user
         return f(*args, **kwargs)
 
-    return decorator
+    return wrap

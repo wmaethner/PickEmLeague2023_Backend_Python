@@ -7,6 +7,7 @@ from flask import current_app
 from src.PickEmLeague.models import (
     game,
     game_pick,
+    read,
     release_notes,
     release_notes_entry,
     season_stats,

@@ -1,19 +1,14 @@
-from flask import jsonify, request
+from flask import g, jsonify, request
 from flask_restx import Resource, fields
 
-from src.PickEmLeague.decorators.auth import token_required
+from src.PickEmLeague.decorators.auth import login_required, token_required
 from src.PickEmLeague.models.user import User
+from src.PickEmLeague.schemas.core.base_schema import BaseModel
 from src.PickEmLeague.schemas.users.user_list_schema import user_list_model
 from src.PickEmLeague.schemas.users.user_schema import user_model, user_schema
 
 from ..core.base_namespace import BaseNamespace
-from .business import (
-    get_current_user,
-    get_user,
-    get_user_list,
-    update_user,
-    update_user_password,
-)
+from .business import get_user, get_user_list, update_user, update_user_password
 
 user_ns = BaseNamespace(name="users", validate=True)
 user_ns.add_models([user_schema, user_model, user_list_model])
@@ -21,11 +16,11 @@ user_ns.add_models([user_schema, user_model, user_list_model])
 
 @user_ns.route("/current")
 class CurrentUser(Resource):
-    @token_required
+    @login_required
     @user_ns.doc(security="Bearer")
     @user_ns.marshal_with(user_model)
     def get(self):
-        return get_current_user(request)
+        return BaseModel.SuccessResult(g.user)
 
 
 @user_ns.route("/")

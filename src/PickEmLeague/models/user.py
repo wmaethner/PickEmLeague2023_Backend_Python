@@ -58,6 +58,11 @@ class User(db.Model):
         return jwt.encode(payload, key, algorithm="HS256")
 
     @staticmethod
+    def authorized_user(auth_header: str):
+        result = User.decode_access_token(auth_header.split(" ")[1])
+        return User.find_by_id(result.value["id"]) if result.success else None
+
+    @staticmethod
     def decode_access_token(access_token):
         if isinstance(access_token, bytes):
             access_token = access_token.decode("ascii")
