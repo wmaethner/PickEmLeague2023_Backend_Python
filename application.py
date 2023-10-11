@@ -2,35 +2,10 @@ import datetime
 import logging
 import os
 import time
-from logging.config import dictConfig
 
 from flask import Response, request
 
 from src.PickEmLeague import create_app
-
-dictConfig(
-    {
-        "version": 1,
-        "formatters": {
-            "default": {
-                "format": "[%(asctime)s] [%(levelname)s | %(module)s] %(message)s",
-                "datefmt": "%B %d, %Y %H:%M:%S %Z",
-            },
-        },
-        "handlers": {
-            "console": {
-                "class": "logging.StreamHandler",
-                "formatter": "default",
-            },
-            "file": {
-                "class": "logging.FileHandler",
-                "filename": "worldClock.log",
-                "formatter": "default",
-            },
-        },
-        "root": {"level": "DEBUG", "handlers": ["console", "file"]},
-    }
-)
 
 application = create_app(os.getenv("FLASK_ENV", "development"))
 application.logger.setLevel(logging.DEBUG)
