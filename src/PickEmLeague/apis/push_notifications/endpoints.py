@@ -23,6 +23,7 @@ class Notifications(Resource):
         )
     )
     def put(self):
+        print("push notification put")
         user = g.user
         settings = UserSettings.find_by_user(user)
         if not settings:
@@ -39,6 +40,6 @@ class Notifications(Resource):
     )
     def post(self):
         json = request.get_json()
-        user = User.find_by_id()
+        user = User.find_by_id(json["userId"])
         settings = UserSettings.find_by_user(user)
         send_push_message(settings.push_token, json["message"])

@@ -31,6 +31,6 @@ class MiscInfo(Resource):
             {
                 "started": True,
                 "current_week": 6,
-                "versions": {"ios": 10, "android": 8, "server": server_version},
+                "versions": {"ios": 11, "android": 8, "server": server_version},
             }
         )
