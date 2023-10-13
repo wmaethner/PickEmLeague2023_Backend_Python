@@ -15,6 +15,7 @@ push_notifications_ns = BaseNamespace(name="push_notifications", validate=True)
 @push_notifications_ns.route("/")
 class Notifications(Resource):
     @login_required
+    @push_notifications_ns.doc(security="Bearer")
     @push_notifications_ns.expect(
         push_notifications_ns.model(
             "PushNotificationToken",
