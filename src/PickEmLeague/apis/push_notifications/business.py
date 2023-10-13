@@ -19,9 +19,7 @@ session = requests.Session()
 def send_push_message(token, message, extra=None):
     try:
         print(f"send push: {token} - {message}")
-        response = PushClient(session=session).publish(
-            PushMessage(to=token, body=message, data=extra)
-        )
+        response = PushClient().publish(PushMessage(to=token, body=message, data=extra))
     except PushServerError as exc:
         print(exc.errors)
         print(exc.response_data)
