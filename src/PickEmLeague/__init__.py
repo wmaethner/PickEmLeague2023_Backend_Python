@@ -7,6 +7,7 @@ import time
 import colors
 import flask_migrate
 from flask import Flask, g, request
+from flask_apscheduler import APScheduler
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -18,6 +19,7 @@ cors = CORS()
 db = SQLAlchemy()
 migrate = Migrate()
 bcrypt = Bcrypt()
+scheduler = APScheduler()
 
 
 def configure_logging():
@@ -40,6 +42,9 @@ def create_app(config_name):
     db.init_app(application)
     migrate.init_app(application, db, directory="src/PickEmLeague/migrations")
     bcrypt.init_app(application)
+    scheduler.init_app(application)
+
+    scheduler.start()
 
     with application.app_context():
         flask_migrate.upgrade(directory="src/PickEmLeague/migrations")
@@ -51,5 +56,11 @@ def create_app(config_name):
     @application.errorhandler(Exception)
     def error(e):
         print("Error")
+
+    # @scheduler.task("cron", id="upcoming_game_check", minute="*")
+    # def scheduled_task():
+    #     jobs = scheduler.get_jobs()
+    #     print("task executed")
+    #     print(jobs)
 
     return application

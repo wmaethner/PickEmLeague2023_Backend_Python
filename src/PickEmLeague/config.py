@@ -34,6 +34,7 @@ class DevelopmentConfig(Config):
 
     TOKEN_EXPIRE_MINUTES = 15
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", DATABASE_DEV)
+    SCHEDULER_API_ENABLED = True
 
 
 class ProductionConfig(Config):
@@ -42,6 +43,7 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = f'postgresql://{os.getenv("DATABASE_USER")}:{os.getenv("DATABASE_PASSWORD")}@{os.getenv("DATABASE_URL", DATABASE_PROD)}:5432/pick_em_league_2023'
     TOKEN_EXPIRE_HOURS = 3000
     PRESERVE_CONTEXT_ON_EXCEPTION = True
+    SCHEDULER_API_ENABLED = True
 
 
 ENV_CONFIG_DICT = dict(
