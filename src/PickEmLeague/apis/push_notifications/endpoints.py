@@ -42,7 +42,9 @@ class Notifications(Resource):
         try:
             json = request.get_json()
             user = User.find_by_id(int(json["userId"]))
+            print(f"push notification user: {user}")
             settings = UserSettings.find_by_user(user)
+            print(f"settings: {settings}")
             send_push_message(settings.push_token, json["message"])
         except Exception as e:
             print(e)
