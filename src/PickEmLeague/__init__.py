@@ -19,6 +19,7 @@ cors = CORS()
 db = SQLAlchemy()
 migrate = Migrate()
 bcrypt = Bcrypt()
+scheduler = APScheduler()
 
 
 def configure_logging():
@@ -36,8 +37,6 @@ def create_app(config_name):
     from src.PickEmLeague.apis import api_bp
 
     application.register_blueprint(api_bp, url_prefix="/api")
-
-    scheduler = APScheduler()
 
     cors.init_app(application)
     db.init_app(application)
@@ -58,8 +57,10 @@ def create_app(config_name):
     def error(e):
         print("Error")
 
-    @scheduler.task("interval", id="task1", seconds=15)
-    def scheduled_task():
-        print("task executed")
+    # @scheduler.task("cron", id="upcoming_game_check", minute="*")
+    # def scheduled_task():
+    #     jobs = scheduler.get_jobs()
+    #     print("task executed")
+    #     print(jobs)
 
     return application

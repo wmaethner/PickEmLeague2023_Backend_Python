@@ -13,10 +13,12 @@ class UserSettings(db.Model):
     __tablename__ = "user_settings"
     id: int
     user: Mapped[User]
+    push_token: str
 
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"))
     user = db.relationship("User", lazy=True, cascade="delete")
+    push_token = db.Column(db.String)
 
     @classmethod
     def find_by_id(cls, id: int) -> "UserSettings":
