@@ -1,4 +1,4 @@
-from flask import g, request
+from flask import g, jsonify, request
 from flask_restx import Resource, fields
 
 from src.PickEmLeague import db
@@ -46,5 +46,7 @@ class Notifications(Resource):
             settings = UserSettings.find_by_user(user)
             print(f"settings: {settings}")
             send_push_message(settings.push_token, json["message"])
+            return "sucess"
         except Exception as e:
             print(e)
+            return jsonify(str(e))
