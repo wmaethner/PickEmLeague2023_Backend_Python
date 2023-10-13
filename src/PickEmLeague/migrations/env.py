@@ -13,6 +13,7 @@ from src.PickEmLeague.models import (
     season_stats,
     team,
     user,
+    user_settings,
 )
 
 # this is the Alembic Config object, which provides
