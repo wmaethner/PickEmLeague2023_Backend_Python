@@ -25,14 +25,13 @@ def schedule_task(user: User, game: Game):
     scheduler.add_job(
         task_id(user, game),
         game_pick_notification,
-        # interval="date",
         run_date=schedule_time(game),
         args=[user.id, game.id],
     )
 
 
 def schedule_time(game: Game):
-    return game._game_time - timedelta(hours=1)
+    return game._game_time - timedelta(hours=1, minutes=45)
 
 
 def task_exists(user: User, game: Game):
