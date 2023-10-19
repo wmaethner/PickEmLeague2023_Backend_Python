@@ -29,7 +29,7 @@ class AllJobs(Resource):
             print(e)
 
 
-@scheduler_ns.route("/<string:id>")
+@scheduler_ns.route("/job/<string:id>")
 class JobDetails(Resource):
     def post(self, id):
         scheduler.run_job(id)
