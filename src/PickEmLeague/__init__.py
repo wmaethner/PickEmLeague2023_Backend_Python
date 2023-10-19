@@ -52,12 +52,12 @@ def create_app(config_name):
     #     run_date=datetime.datetime(2023, 10, 15, 21, 11, 10),
     # )
 
-    scheduler.add_job(
-        "date_task_local",
-        auto_task,
-        trigger="date",
-        run_date=datetime.datetime(2023, 10, 15, 17, 11, 50),
-    )
+    # scheduler.add_job(
+    #     "date_task_local",
+    #     auto_task,
+    #     trigger="date",
+    #     run_date=datetime.datetime(2023, 10, 15, 17, 11, 50),
+    # )
 
     with application.app_context():
         flask_migrate.upgrade(directory="src/PickEmLeague/migrations")
