@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from apscheduler.job import Job
+from flask import jsonify
 from flask_restx import Resource
 
 from src.PickEmLeague import scheduler
@@ -19,11 +21,12 @@ class AllJobs(Resource):
     # @scheduler_ns.marshal_with()
     def get(self):
         try:
-            jobs = scheduler.get_jobs()
-            print(jobs)
+            jobs: list[Job] = scheduler.get_jobs()
+            # print(type(jobs[0]))
+            # print(jobs)
+            return jsonify([{"name": x.name, "next_run": x.next_run_time} for x in jobs])
         except Exception as e:
             print(e)
-        return jobs
 
 
 @scheduler_ns.route("/<int:id>")

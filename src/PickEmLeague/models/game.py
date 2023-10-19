@@ -47,6 +47,12 @@ class Game(db.Model):
         return db.session.scalars(select(cls).where(cls.week == week)).all()
 
     @classmethod
+    def find_in_range(cls, start: datetime, end: datetime) -> List["Game"]:
+        return db.session.scalars(
+            select(cls).where(cls._game_time > start).where(cls._game_time < end)
+        ).all()
+
+    @classmethod
     def find_all(cls) -> List["Game"]:
         return cls.query.all()
 

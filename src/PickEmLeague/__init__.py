@@ -22,19 +22,18 @@ bcrypt = Bcrypt()
 scheduler = APScheduler()
 
 
-def configure_logging():
-    # register root logging
-    logging.basicConfig(level=logging.DEBUG)
-    # logging.getLogger("werkzeug").setLevel(logging.INFO)
+def auto_task():
+    jobs = scheduler.get_jobs()
+    print("task executed")
+    print(jobs)
 
 
 def create_app(config_name):
-    configure_logging()
     application = Flask(__name__, instance_relative_config=True)
     application.config.from_object(get_config(config_name))
-    # configure_logging()
 
     from src.PickEmLeague.apis import api_bp
+    from src.PickEmLeague.services.tasks import daily_game_check
 
     application.register_blueprint(api_bp, url_prefix="/api")
 
@@ -46,21 +45,38 @@ def create_app(config_name):
 
     scheduler.start()
 
+    # scheduler.add_job(
+    #     "date_task",
+    #     auto_task,
+    #     trigger="date",
+    #     run_date=datetime.datetime(2023, 10, 15, 21, 11, 10),
+    # )
+
+    scheduler.add_job(
+        "date_task_local",
+        auto_task,
+        trigger="date",
+        run_date=datetime.datetime(2023, 10, 15, 17, 11, 50),
+    )
+
     with application.app_context():
         flask_migrate.upgrade(directory="src/PickEmLeague/migrations")
 
-    @application.before_request
-    def before():
-        print("Factory app before request")
-
-    @application.errorhandler(Exception)
-    def error(e):
-        print("Error")
-
-    # @scheduler.task("cron", id="upcoming_game_check", minute="*")
+    # @scheduler.task(
+    #     "date",
+    #     id="upcoming_game_check",
+    #     run_date=datetime.datetime(2023, 9, 15, 21, 1, 0),
+    # )
     # def scheduled_task():
     #     jobs = scheduler.get_jobs()
     #     print("task executed")
     #     print(jobs)
+
+    # @scheduler.task("interval", id="test", seconds=10)
+    # def interval_task():
+    #     jobs = scheduler.get_jobs()
+    #     print(jobs)
+    #     print(f"Interval: {datetime.datetime.now()}")
+    #     print(f"Interval: {datetime.datetime.utcnow()}")
 
     return application
