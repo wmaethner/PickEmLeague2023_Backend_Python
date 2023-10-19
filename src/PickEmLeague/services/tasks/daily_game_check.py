@@ -24,9 +24,10 @@ def daily_game_check():
 def schedule_task(user: User, game: Game):
     scheduler.add_job(
         task_id(user, game),
-        game_pick_notification(user.id, game.id),
-        interval="date",
+        game_pick_notification,
+        # interval="date",
         run_date=schedule_time(game),
+        args=[user.id, game.id],
     )
 
 

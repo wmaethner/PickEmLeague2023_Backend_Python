@@ -24,7 +24,9 @@ class AllJobs(Resource):
             jobs: list[Job] = scheduler.get_jobs()
             # print(type(jobs[0]))
             # print(jobs)
-            return jsonify([{"name": x.name, "next_run": x.next_run_time} for x in jobs])
+            return jsonify(
+                [{"id": x.id, "name": x.name, "next_run": x.next_run_time} for x in jobs]
+            )
         except Exception as e:
             print(e)
 
@@ -32,7 +34,10 @@ class AllJobs(Resource):
 @scheduler_ns.route("/job/<string:id>")
 class JobDetails(Resource):
     def post(self, id):
-        scheduler.run_job(id)
+        try:
+            scheduler.run_job(id)
+        except Exception as e:
+            print(e)
 
 
 @scheduler_ns.route("/<int:id>")
