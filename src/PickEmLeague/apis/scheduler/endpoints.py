@@ -47,7 +47,11 @@ class JobDetails(Resource):
 class Jobs(Resource):
     def get(self, id):
         send_notification(User.find_by_id(10), "Non scheduled message")
-        scheduler.add_job("notification-test", notification_job)
+        scheduler.add_job(
+            "notification-test",
+            notification_job,
+            run_date=(datetime.now() + timedelta(0, 5)),
+        )
         try:
             job = scheduler.get_job(f"task-{id}")
         except Exception as e:
@@ -77,8 +81,5 @@ class Jobs(Resource):
 
 
 def notification_job():
-    send_notification(
-        User.find_by_id(10),
-        "Scheduled notification message",
-        run_date=(datetime.now() + timedelta(0, 5)),
-    )
+    print("scheduled notification job")
+    send_notification(User.find_by_id(10), "Scheduled notification message")
