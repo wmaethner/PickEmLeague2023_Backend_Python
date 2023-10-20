@@ -26,9 +26,10 @@ session = requests.Session()
 # want to use, or simply pass in a `PushMessage` object.
 def send_push_message(token, message, extra=None):
     try:
-        response = PushClient(session=session).publish(
-            PushMessage(to=token, body=message, data=extra)
-        )
+        # response = PushClient(session=session).publish(
+        #     PushMessage(to=token, body=message, data=extra)
+        # )
+        response = PushClient().publish(PushMessage(to=token, body=message, data=extra))
     except PushServerError as exc:
         print(exc.errors)
         print(exc.response_data)
