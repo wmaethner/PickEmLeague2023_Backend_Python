@@ -77,4 +77,8 @@ class Jobs(Resource):
 
 
 def notification_job():
-    send_notification(User.find_by_id(10), "Scheduled notification message")
+    send_notification(
+        User.find_by_id(10),
+        "Scheduled notification message",
+        run_date=(datetime.now() + timedelta(0, 5)),
+    )
