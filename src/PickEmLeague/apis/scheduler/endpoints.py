@@ -46,8 +46,12 @@ class JobDetails(Resource):
 @scheduler_ns.route("/<int:id>")
 class Jobs(Resource):
     def get(self, id):
-        job = scheduler.get_job(f"task-{id}")
-        scheduler.add_job(notification_job)
+        try:
+            job = scheduler.get_job(f"task-{id}")
+            scheduler.add_job("notification-test", notification_job)
+        except Exception as e:
+            print(e)
+
         # send_notification(User.find_by_id(10), "Push notification message")
         return job
 
