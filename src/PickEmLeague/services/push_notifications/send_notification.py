@@ -15,6 +15,7 @@ from src.PickEmLeague.models.user_settings import UserSettings
 
 
 def send_notification(user: User, message: str):
+    print(f"send notification: {user} - {message}")
     token = push_token(user)
     if not token:
         print(f"No token for {user.first_name} {user.last_name}")

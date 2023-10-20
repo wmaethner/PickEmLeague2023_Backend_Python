@@ -81,5 +81,9 @@ class Jobs(Resource):
 
 
 def notification_job():
-    print("scheduled notification job")
-    send_notification(User.find_by_id(10), "Scheduled notification message")
+    with scheduler.app.app_context():
+        print("scheduled notification job")
+        try:
+            send_notification(User.find_by_id(10), "Scheduled notification message")
+        except Exception as e:
+            print(e)
