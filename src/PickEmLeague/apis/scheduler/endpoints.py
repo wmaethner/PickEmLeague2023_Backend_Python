@@ -5,10 +5,13 @@ from flask import jsonify
 from flask_restx import Resource
 
 from src.PickEmLeague import scheduler
+from src.PickEmLeague.models.user import User
+from src.PickEmLeague.services.push_notifications.send_notification import (
+    send_notification,
+)
 from src.PickEmLeague.util.tasks import task
 
 from ..core.base_namespace import BaseNamespace
-from .business import send_push_message
 
 scheduler_ns = BaseNamespace(name="scheduler", validate=True)
 # scheduler_ns.add_models(
@@ -44,9 +47,8 @@ class JobDetails(Resource):
 class Jobs(Resource):
     def get(self, id):
         job = scheduler.get_job(f"task-{id}")
-        send_push_message(
-            "ExponentPushToken[wcxx_sO-UuilaVegm68fAa]", "Push notification message"
-        )
+        scheduler.add_job(notification_job)
+        # send_notification(User.find_by_id(10), "Push notification message")
         return job
 
     def post(self, id):
@@ -67,3 +69,7 @@ class Jobs(Resource):
     def delete(self, id):
         scheduler.remove_job(f"task-{id}")
         return True
+
+
+def notification_job():
+    send_notification(User.find_by_id(10), "Push notification message")
