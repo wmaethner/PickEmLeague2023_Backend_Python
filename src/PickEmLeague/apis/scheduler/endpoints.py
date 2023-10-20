@@ -44,7 +44,9 @@ class JobDetails(Resource):
 class Jobs(Resource):
     def get(self, id):
         job = scheduler.get_job(f"task-{id}")
-        send_push_message("wQQNhQE2EIcoOJsMOUb_6j", "Push notification message")
+        send_push_message(
+            "ExponentPushToken[wcxx_sO-UuilaVegm68fAa]", "Push notification message"
+        )
         return job
 
     def post(self, id):
