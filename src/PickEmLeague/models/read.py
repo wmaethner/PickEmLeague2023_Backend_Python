@@ -10,6 +10,7 @@ from src.PickEmLeague import db
 
 class Readables:
     RELEASE_NOTES = 1
+    MESSAGES = 2
 
 
 @dataclass

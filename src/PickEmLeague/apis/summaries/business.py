@@ -27,7 +27,6 @@ def get_week_pick_statuses(week: int):
     return BaseModel.SuccessResult(pick_statuses)
 
 
-# TODO: Add cached results to game picks so we just have to sum up the corrects
 def get_season_summaries():
     # start = timer()
     users = User.find_all()
