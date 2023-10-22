@@ -15,7 +15,15 @@ from .business import add_message, get_all, get_read, update_read
 from .parsers import new_message_parser
 
 messages_ns = BaseNamespace(name="messages", validate=True)
-messages_ns.add_models([message_schema, message_model, message_list_model])
+messages_ns.add_models(
+    [
+        message_schema,
+        message_model,
+        message_list_model,
+        last_message_read_schema,
+        last_message_read_model,
+    ]
+)
 
 
 @messages_ns.route("")
