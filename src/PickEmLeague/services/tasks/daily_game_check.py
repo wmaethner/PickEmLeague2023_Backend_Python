@@ -31,7 +31,8 @@ def schedule_task(user: User, game: Game):
 
 
 def schedule_time(game: Game):
-    return game._game_time - timedelta(hours=1)
+    # return game._game_time - timedelta(hours=1)
+    return game._game_time - timedelta(minutes=50)
 
 
 def task_exists(user: User, game: Game):
