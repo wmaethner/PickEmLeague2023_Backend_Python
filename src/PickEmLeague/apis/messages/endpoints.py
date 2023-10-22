@@ -3,6 +3,8 @@ from flask_restx import Resource
 
 from src.PickEmLeague.decorators.auth import login_required
 from src.PickEmLeague.schemas.messages.message_schema import (
+    last_message_read_model,
+    last_message_read_schema,
     message_list_model,
     message_model,
     message_schema,
@@ -34,6 +36,7 @@ class MessageList(Resource):
 class LastMessageRead(Resource):
     @login_required
     @messages_ns.doc(security="Bearer")
+    @messages_ns.marshal_with(last_message_read_model)
     def get(self):
         return get_read(g.user.id)
 
