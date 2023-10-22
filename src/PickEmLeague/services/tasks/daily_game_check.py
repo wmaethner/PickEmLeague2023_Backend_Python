@@ -8,7 +8,7 @@ from src.PickEmLeague.models.user import User
 from src.PickEmLeague.services.tasks.game_pick_notification import game_pick_notification
 
 
-@scheduler.task("cron", id="upcoming_game_check", hour="0/4")
+@scheduler.task("cron", id="upcoming_game_check", hour="*/4")
 def daily_game_check():
     start = datetime.utcnow()
     end = start + timedelta(hours=10)
@@ -31,7 +31,7 @@ def schedule_task(user: User, game: Game):
 
 
 def schedule_time(game: Game):
-    return game._game_time - timedelta(hours=1, minutes=45)
+    return game._game_time - timedelta(hours=1)
 
 
 def task_exists(user: User, game: Game):
