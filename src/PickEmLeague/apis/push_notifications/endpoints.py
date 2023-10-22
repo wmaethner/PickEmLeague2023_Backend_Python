@@ -5,6 +5,9 @@ from src.PickEmLeague import db
 from src.PickEmLeague.decorators.auth import login_required
 from src.PickEmLeague.models.user import User
 from src.PickEmLeague.models.user_settings import UserSettings
+from src.PickEmLeague.services.push_notifications.send_notification import (
+    send_notification,
+)
 
 from ..core.base_namespace import BaseNamespace
 from .business import send_push_message
@@ -35,18 +38,26 @@ class Notifications(Resource):
     @push_notifications_ns.expect(
         push_notifications_ns.model(
             "PushNotification",
-            {"userId": fields.Integer, "message": fields.String},
+            {"message": fields.String},
         )
     )
     def post(self):
-        try:
-            json = request.get_json()
-            user = User.find_by_id(int(json["userId"]))
-            print(f"push notification user: {user}")
-            settings = UserSettings.find_by_user(user)
-            print(f"settings: {settings}")
-            send_push_message(settings.push_token, json["message"])
-            return "sucess"
-        except Exception as e:
-            print(e)
-            return jsonify(str(e))
+        json = request.get_json()
+        send_notification(User.find_by_id(10), json["message"])
+        # try:
+        #     json = request.get_json()
+        #     user = User.find_by_id(int(json["userId"]))
+        #     print(f"push notification user: {user}")
+        #     settings = UserSettings.find_by_user(user)
+        #     print(f"settings: {settings}")
+        #     send_push_message(settings.push_token, json["message"])
+        #     return "sucess"
+        # except Exception as e:
+        #     print(e)
+        #     return jsonify(str(e))
+
+
+@push_notifications_ns.route("/<int:id>")
+class Notifications(Resource):
+    def post(self, id):
+        send_notification(User.find_by_id(10), "Non scheduled message")
