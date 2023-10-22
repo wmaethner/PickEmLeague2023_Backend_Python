@@ -17,7 +17,7 @@ def daily_game_check():
         picks = GamePick.find_by_game(game)
         unpicked = [x for x in picks if x.pick == GameResult.NOT_PLAYED]
         for pick in unpicked:
-            if not task_exists(pick.user, pick.game) and pick.user.id == 10:
+            if not task_exists(pick.user, pick.game):
                 schedule_task(pick.user, pick.game)
 
 
@@ -31,8 +31,7 @@ def schedule_task(user: User, game: Game):
 
 
 def schedule_time(game: Game):
-    # return game._game_time - timedelta(hours=1)
-    return game._game_time - timedelta(minutes=50)
+    return game._game_time - timedelta(hours=1)
 
 
 def task_exists(user: User, game: Game):
