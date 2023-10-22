@@ -29,7 +29,7 @@ class Message(db.Model):
 
     @classmethod
     def find_all(cls) -> List["Message"]:
-        return db.session.scalars(select(cls).order_by(asc(cls.created_at))).all()
+        return db.session.scalars(select(cls).order_by(desc(cls.created_at))).all()
 
     # @classmethod
     # def find_by_user(cls, user: User) -> List["Message"]:
