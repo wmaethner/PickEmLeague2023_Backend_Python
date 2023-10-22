@@ -8,7 +8,7 @@ message_schema = Model(
     "MessageSchema",
     {"id": Integer, "text": String, "user": Nested(user_schema), "created_at": String},
 )
-last_message_read_schema = Model("LastMessageReadSchema", {"id": Integer})
+last_message_read_schema = Model("LastMessageReadSchema", {"readable_id": Integer})
 
 message_model = BaseModel("MessageModel", message_schema).model()
 message_list_model = BaseModel("MessageModel", message_schema).list_model()

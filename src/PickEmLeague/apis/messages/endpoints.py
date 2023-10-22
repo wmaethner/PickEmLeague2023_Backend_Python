@@ -54,6 +54,4 @@ class ReadMessage(Resource):
     @login_required
     @messages_ns.doc(security="Bearer")
     def put(self, id):
-        print("update read")
-        print(g.user)
         return update_read(id, g.user.id)
