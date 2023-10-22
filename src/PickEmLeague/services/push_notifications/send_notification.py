@@ -21,7 +21,7 @@ def send_notification(user: User, message: str):
         print(f"No token for {user.first_name} {user.last_name}")
         return
     try:
-        response = PushClient().publish(PushMessage(to=token, body=message))
+        response = PushClient().publish(PushMessage(to=token, body=message, badge=1))
         response.validate_response()
     except Exception as e:
         print(f"Send notification error for {user.first_name} {user.last_name}: {e}")
