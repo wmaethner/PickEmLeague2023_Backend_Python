@@ -45,38 +45,10 @@ def create_app(config_name):
 
     scheduler.start()
 
-    # scheduler.add_job(
-    #     "date_task",
-    #     auto_task,
-    #     trigger="date",
-    #     run_date=datetime.datetime(2023, 10, 15, 21, 11, 10),
-    # )
-
-    # scheduler.add_job(
-    #     "date_task_local",
-    #     auto_task,
-    #     trigger="date",
-    #     run_date=datetime.datetime(2023, 10, 15, 17, 11, 50),
-    # )
-
     with application.app_context():
         flask_migrate.upgrade(directory="src/PickEmLeague/migrations")
 
-    # @scheduler.task(
-    #     "date",
-    #     id="upcoming_game_check",
-    #     run_date=datetime.datetime(2023, 9, 15, 21, 1, 0),
-    # )
-    # def scheduled_task():
-    #     jobs = scheduler.get_jobs()
-    #     print("task executed")
-    #     print(jobs)
-
-    # @scheduler.task("interval", id="test", seconds=10)
-    # def interval_task():
-    #     jobs = scheduler.get_jobs()
-    #     print(jobs)
-    #     print(f"Interval: {datetime.datetime.now()}")
-    #     print(f"Interval: {datetime.datetime.utcnow()}")
+        # Run jobs at start up
+        scheduler.run_job("upcoming_game_check")
 
     return application
