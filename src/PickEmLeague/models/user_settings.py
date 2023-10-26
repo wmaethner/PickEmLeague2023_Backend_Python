@@ -14,11 +14,15 @@ class UserSettings(db.Model):
     id: int
     user: Mapped[User]
     push_token: str
+    pick_notification_enabled: bool
+    message_notification_enabled: bool
 
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"))
     user = db.relationship("User", lazy=True, cascade="delete")
     push_token = db.Column(db.String)
+    pick_notification_enabled = db.Column(db.Boolean, default=True)
+    message_notification_enabled = db.Column(db.Boolean, default=True)
 
     @classmethod
     def find_by_id(cls, id: int) -> "UserSettings":

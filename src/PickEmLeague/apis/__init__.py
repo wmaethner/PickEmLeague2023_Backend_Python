@@ -13,6 +13,7 @@ from src.PickEmLeague.apis.release_notes.endpoints import release_notes_ns
 from src.PickEmLeague.apis.scheduler.endpoints import scheduler_ns
 from src.PickEmLeague.apis.summaries.endpoints import summary_ns
 from src.PickEmLeague.apis.teams.endpoints import team_ns
+from src.PickEmLeague.apis.user_settings.endpoints import user_settings_ns
 from src.PickEmLeague.apis.users.endpoints import user_ns
 
 api_bp = Blueprint("api", __name__, url_prefix="/api")
@@ -38,3 +39,4 @@ api.add_namespace(release_notes_ns, path="/release_notes")
 api.add_namespace(messages_ns, path="/messages")
 api.add_namespace(scheduler_ns, path="/scheduler")
 api.add_namespace(push_notifications_ns, path="/push_notifications")
+api.add_namespace(user_settings_ns, path="/user_settings")
