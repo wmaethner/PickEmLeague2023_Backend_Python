@@ -43,6 +43,6 @@ def create_app(config_name):
         flask_migrate.upgrade(directory="src/PickEmLeague/migrations")
 
         # Run jobs at start up
-        # scheduler.run_job("upcoming_game_check")
+        scheduler.run_job("upcoming_game_check")
 
     return application
