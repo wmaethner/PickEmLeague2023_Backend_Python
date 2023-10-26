@@ -10,8 +10,6 @@ from src.PickEmLeague.models.user import User
 
 from .game import Game
 
-# TODO: Add databse validation on these records to prevent duplicates for user/game (unique index?)
-
 
 @dataclass
 class GamePick(db.Model):

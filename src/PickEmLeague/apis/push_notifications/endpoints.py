@@ -1,63 +1,41 @@
-from flask import g, jsonify, request
-from flask_restx import Resource, fields
+from flask import g, request
+from flask_restx import Resource
 
-from src.PickEmLeague import db
 from src.PickEmLeague.decorators.auth import login_required
 from src.PickEmLeague.models.user import User
-from src.PickEmLeague.models.user_settings import UserSettings
+from src.PickEmLeague.schemas.push_notifications import (
+    send_notification_model,
+    send_notification_schema,
+    udpate_token_model,
+    udpate_token_schema,
+)
 from src.PickEmLeague.services.push_notifications.send_notification import (
     send_notification,
 )
 
 from ..core.base_namespace import BaseNamespace
-from .business import send_push_message
+from .business import update_user_settings
 
 push_notifications_ns = BaseNamespace(name="push_notifications", validate=True)
+push_notifications_ns.add_models(
+    [
+        send_notification_model,
+        send_notification_schema,
+        udpate_token_model,
+        udpate_token_schema,
+    ]
+)
 
 
 @push_notifications_ns.route("/")
 class Notifications(Resource):
     @login_required
     @push_notifications_ns.doc(security="Bearer")
-    @push_notifications_ns.expect(
-        push_notifications_ns.model(
-            "PushNotificationToken",
-            {"token": fields.String},
-        )
-    )
+    @push_notifications_ns.expect(udpate_token_model)
     def put(self):
-        print("push notification put")
-        user = g.user
-        settings = UserSettings.find_by_user(user)
-        if not settings:
-            settings = UserSettings(user=user)
-            db.session.add(settings)
-        settings.push_token = request.get_json()["token"]
-        db.session.commit()
+        update_user_settings(g.user, request.get_json()["token"])
 
-    @push_notifications_ns.expect(
-        push_notifications_ns.model(
-            "PushNotification",
-            {"message": fields.String},
-        )
-    )
+    @push_notifications_ns.expect(send_notification_model)
     def post(self):
         json = request.get_json()
         send_notification(User.find_by_id(10), json["message"])
-        # try:
-        #     json = request.get_json()
-        #     user = User.find_by_id(int(json["userId"]))
-        #     print(f"push notification user: {user}")
-        #     settings = UserSettings.find_by_user(user)
-        #     print(f"settings: {settings}")
-        #     send_push_message(settings.push_token, json["message"])
-        #     return "sucess"
-        # except Exception as e:
-        #     print(e)
-        #     return jsonify(str(e))
-
-
-@push_notifications_ns.route("/<int:id>")
-class Notifications(Resource):
-    def post(self, id):
-        send_notification(User.find_by_id(10), "Non scheduled message")
