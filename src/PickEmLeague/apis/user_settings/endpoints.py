@@ -36,7 +36,7 @@ class TogglePickNotification(Resource):
 
 
 @user_settings_ns.route("/message_notification")
-class TogglePickNotification(Resource):
+class ToggleMessageNotification(Resource):
     @login_required
     @user_settings_ns.doc(security="Bearer")
     def put(self):
