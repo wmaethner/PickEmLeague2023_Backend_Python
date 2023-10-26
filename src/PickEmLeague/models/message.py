@@ -31,6 +31,6 @@ class Message(db.Model):
     def find_all(cls) -> List["Message"]:
         return db.session.scalars(select(cls).order_by(desc(cls.created_at))).all()
 
-    # @classmethod
-    # def find_by_user(cls, user: User) -> List["Message"]:
-    #     return db.paginate(select(cls).where(cls.user == user))
+    @classmethod
+    def find_after(cls, id: int) -> List["Message"]:
+        return db.session.scalars(select(cls).where(cls.id > id)).all()

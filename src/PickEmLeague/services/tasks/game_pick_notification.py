@@ -12,4 +12,4 @@ def game_pick_notification(user_id: int, game_id: int):
         game = Game.find_by_id(game_id)
 
         message = f"Make pick for {game.away_team.name} @ {game.home_team.name}"
-        send_notification(user, message)
+        send_notification(user, message, 1)

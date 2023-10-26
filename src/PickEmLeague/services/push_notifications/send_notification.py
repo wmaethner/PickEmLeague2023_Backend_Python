@@ -1,14 +1,4 @@
-import os
-
-import requests
-from exponent_server_sdk import (
-    DeviceNotRegisteredError,
-    PushClient,
-    PushMessage,
-    PushServerError,
-    PushTicketError,
-)
-from requests.exceptions import ConnectionError, HTTPError
+from exponent_server_sdk import PushClient, PushMessage
 
 from src.PickEmLeague.models.user import User
 from src.PickEmLeague.models.user_settings import UserSettings
