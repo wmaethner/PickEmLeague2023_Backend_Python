@@ -22,12 +22,6 @@ bcrypt = Bcrypt()
 scheduler = APScheduler()
 
 
-def auto_task():
-    jobs = scheduler.get_jobs()
-    print("task executed")
-    print(jobs)
-
-
 def create_app(config_name):
     application = Flask(__name__, instance_relative_config=True)
     application.config.from_object(get_config(config_name))
@@ -49,6 +43,6 @@ def create_app(config_name):
         flask_migrate.upgrade(directory="src/PickEmLeague/migrations")
 
         # Run jobs at start up
-        scheduler.run_job("upcoming_game_check")
+        # scheduler.run_job("upcoming_game_check")
 
     return application

@@ -4,6 +4,9 @@ from src.PickEmLeague import db
 from src.PickEmLeague.models.message import Message
 from src.PickEmLeague.models.read import Read, Readables
 from src.PickEmLeague.schemas.core.base_schema import BaseModel
+from src.PickEmLeague.services.messages.new_message_notifications import (
+    send_new_message_notifications,
+)
 
 
 def get_all():
@@ -14,6 +17,7 @@ def add_message(message: str, user_id):
     message = Message(user_id=user_id, text=message)
     db.session.add(message)
     db.session.commit()
+    send_new_message_notifications()
 
 
 def update_read(message_id, user_id):

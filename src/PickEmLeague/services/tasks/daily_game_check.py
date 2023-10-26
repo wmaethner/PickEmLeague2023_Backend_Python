@@ -5,20 +5,28 @@ from src.PickEmLeague.models.enums import GameResult
 from src.PickEmLeague.models.game import Game
 from src.PickEmLeague.models.game_pick import GamePick
 from src.PickEmLeague.models.user import User
+from src.PickEmLeague.models.user_settings import UserSettings
 from src.PickEmLeague.services.tasks.game_pick_notification import game_pick_notification
 
 
 @scheduler.task("cron", id="upcoming_game_check", hour="*/4")
 def daily_game_check():
-    start = datetime.utcnow()
-    end = start + timedelta(hours=10)
-    games = Game.find_in_range(start, end)
-    for game in games:
-        picks = GamePick.find_by_game(game)
-        unpicked = [x for x in picks if x.pick == GameResult.NOT_PLAYED]
-        for pick in unpicked:
-            if not task_exists(pick.user, pick.game):
+    with scheduler.app.app_context():
+        start = datetime.utcnow()
+        end = start + timedelta(hours=10)
+        games = Game.find_in_range(start, end)
+        for game in games:
+            picks = GamePick.find_by_game(game)
+            for pick in [x for x in picks if should_schedule_task(x)]:
                 schedule_task(pick.user, pick.game)
+
+
+def should_schedule_task(pick: GamePick) -> bool:
+    return (
+        pick.pick == GameResult.NOT_PLAYED
+        and UserSettings.find_by_user(pick.user).pick_notification_enabled
+        and (not task_exists(pick.user, pick.game))
+    )
 
 
 def schedule_task(user: User, game: Game):
