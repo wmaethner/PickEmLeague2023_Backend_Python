@@ -22,9 +22,11 @@ def daily_game_check():
 
 
 def should_schedule_task(pick: GamePick) -> bool:
+    settings = UserSettings.find_by_user(pick.user)
     return (
         pick.pick == GameResult.NOT_PLAYED
-        and UserSettings.find_by_user(pick.user).pick_notification_enabled
+        and settings
+        and settings.pick_notification_enabled
         and (not task_exists(pick.user, pick.game))
     )
 
