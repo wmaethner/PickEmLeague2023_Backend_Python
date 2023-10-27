@@ -15,6 +15,7 @@ from src.PickEmLeague.services.push_notifications.send_notification import (
 
 from ..core.base_namespace import BaseNamespace
 from .business import update_user_settings
+from .parsers import update_token_parser
 
 push_notifications_ns = BaseNamespace(name="push_notifications", validate=True)
 push_notifications_ns.add_models(
@@ -31,9 +32,10 @@ push_notifications_ns.add_models(
 class Notifications(Resource):
     @login_required
     @push_notifications_ns.doc(security="Bearer")
-    @push_notifications_ns.expect(udpate_token_model)
+    @push_notifications_ns.expect(update_token_parser)
     def put(self):
-        update_user_settings(g.user, request.get_json()["token"])
+        args = update_token_parser.parse_args()
+        update_user_settings(g.user, args["token"])
 
     @push_notifications_ns.expect(send_notification_model)
     def post(self):
