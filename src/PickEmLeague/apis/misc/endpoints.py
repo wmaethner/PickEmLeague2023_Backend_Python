@@ -30,7 +30,7 @@ class MiscInfo(Resource):
         return BaseModel.SuccessResult(
             {
                 "started": True,
-                "current_week": 9,
+                "current_week": 10,
                 "versions": {"ios": 13, "android": 9, "server": server_version},
             }
         )
