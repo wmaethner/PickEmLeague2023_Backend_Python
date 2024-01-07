@@ -10,7 +10,12 @@ from src.PickEmLeague.schemas.summaries.summary_schema import (
 )
 
 from ..core.base_namespace import BaseNamespace
-from .business import get_season_summaries, get_week_pick_statuses, get_week_summaries
+from .business import (
+    get_season_summaries,
+    get_week_pick_statuses,
+    get_week_summaries,
+    refresh_season_summaries,
+)
 
 summary_ns = BaseNamespace(name="summaries", validate=True)
 summary_ns.add_models(
@@ -46,3 +51,6 @@ class SeasonSummary(Resource):
     def get(self):
         summaries = get_season_summaries()
         return summaries
+
+    def put(self):
+        refresh_season_summaries()

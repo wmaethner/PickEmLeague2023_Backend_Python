@@ -37,26 +37,33 @@ def get_season_summaries():
     return BaseModel.SuccessResult(summaries)
 
 
+def refresh_season_summaries():
+    for user in User.find_all():
+        season_stats = SeasonStats.find_by_user(user)
+        _refresh_season_score(user, season_stats)
+
+
 def _season_summary_for_user(user: User):
     season_stats = SeasonStats.find_by_user(user)
     if season_stats.score is None:
-        game_picks = GamePick.find_by_user(user)
-        games = Game.find_all()
-        score, correct = 0, 0
-        for g in games:
-            gp = [x for x in game_picks if x.game == g][0]
-            if gp:
-                if g.result == GameResult.NOT_PLAYED:
-                    continue
-                if gp.pick == g.result:
-                    score += gp.amount if gp.amount else 0
-                    correct += 1
-            else:
-                # Throw error?
-                pass
-        season_stats.score = score
-        season_stats.correct_picks = correct
-        db.session.commit()
+        _refresh_season_score(user, season_stats)
+        # game_picks = GamePick.find_by_user(user)
+        # games = Game.find_all()
+        # score, correct = 0, 0
+        # for g in games:
+        #     gp = [x for x in game_picks if x.game == g][0]
+        #     if gp:
+        #         if g.result == GameResult.NOT_PLAYED:
+        #             continue
+        #         if gp.pick == g.result:
+        #             score += gp.amount if gp.amount else 0
+        #             correct += 1
+        #     else:
+        #         # Throw error?
+        #         pass
+        # season_stats.score = score
+        # season_stats.correct_picks = correct
+        # db.session.commit()
     return {
         "user": user,
         "score": season_stats.score,
@@ -90,3 +97,23 @@ def _week_pick_status_for_user(week: int, user: User):
     elif any(picks_made):
         status = 1
     return {"user": user, "status": status}
+
+
+def _refresh_season_score(user: User, season_stats: SeasonStats):
+    game_picks = GamePick.find_by_user(user)
+    games = Game.find_all()
+    score, correct = 0, 0
+    for g in games:
+        gp = [x for x in game_picks if x.game == g][0]
+        if gp:
+            if g.result == GameResult.NOT_PLAYED:
+                continue
+            if gp.pick == g.result:
+                score += gp.amount if gp.amount else 0
+                correct += 1
+        else:
+            # Throw error?
+            pass
+    season_stats.score = score
+    season_stats.correct_picks = correct
+    db.session.commit()
